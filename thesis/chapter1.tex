@@ -1,0 +1,52 @@
+\selectlanguage{english}
+
+\section{Introduction to Precoder design}
+
+Precoding can be explained as the beamforming method used for multi-stream transmission in \ac{MIMO} communication. Multiple data streams are emitted from the transmit antenna having weights to maximize the throughput of receiver output. In this technique, transmitter sends coded information to the receiver for analyzing the channel, where the receiver is a simple detector, example a matched filter, and does not need the channel side information. Thus reducing the effects of channel used for the communication. Precoding can be explained for both point to point systems and multi-user \ac{MIMO} system.
+
+In point-to-point \ac{MIMO} system, transmitter is equipped with multiple antennas that communicates with a receiver that has multiple antennas. The precoding in point to point case assumes a narrowband slowly fading channel, that is achieved through \ac{OFDM}, and the channel capacity and throughput can be maximized depending on the \ac{CSI} available in the system. If the transmitter has statistical information and the receiver knows the channel matrix then eigen beamforming achieves the \ac{MIMO} channel capacity, where, the transmitter emits multiple streams in eigen directions of the channel covariance matrix. If the channel matrix is completely known, singular-value-decomposition \ac{SVD} precoding is known to achieve the \ac{MIMO} channel capacity, where, the channel matrix is diagonalized by taking an \ac{SVD} and removing the two unitary matrices through pre- and post-multiplication at the transmitter and receiver, respectively, thus, one data stream per singular value can be transmitted without having any interference.
+
+In \ac{MU-MIMO}, a multi-antenna transmitter communicates simultaneously with multiple receivers with one or more antennas known as \ac{SDMA}. Precoding algorithms for \ac{SDMA} systems can be sub-divided into linear and nonlinear precoding types. The capacity achieving algorithms are nonlinear approach but linear precoding approaches usually achieve reasonable performance with much lower complexity. Linear precoding strategies include \ac{MRT},  \ac{ZF} precoding, and transmit Wiener precoding, there are also precoding strategies for low-rate feedback of channel state information. Nonlinear precoding is designed based on the concept of \ac{DPC}, which shows that any known interference at the transmitter can be subtracted without the penalty of radio resources if the optimal precoding scheme can be applied on the transmit signal.
+
+\ac{DPC} is a coding technique that pre-cancels known interference without power penalty. Only the transmitter needs to know this  interference, but full \ac{CSI} is required everywhere to achieve the weighted sum capacity. \ac{DPC} is known as the capacity achieving scheme in the \ac{MIMO} channel. But \ac{DPC} is a Non-linear technique for interference cancellation having higher degree of complexity. Thus, to overcome this we can go for a linear technique considering the problem of  \ac{WSRM} with linear transmit precoding for multicell  \ac{MIMO} downlink. But, the \ac{WSRM} problem, for single-antenna receivers are considered to be NP-hard. Although 
+optimal beamformers can be obtained and they may not be practically useful since the complexity of finding optimal designs grows exponentially with the problem size. Hence, the need of computationally conducive suboptimal solutions to the WSRM problem 
+still remains. Since the \ac{WSRM} problem is nonconvex and NP-hard, there exists a class of beamformer designs which 
+are based on achieving the necessary optimal conditions of the \ac{WSRM} problem.
+
+
+%--------------------------------------------------------------------
+%sys model precoder design-------------------------------------------
+%--------------------------------------------------------------------
+
+\subsection{System Model}
+
+Consider a downlink \ac{MIMO} \ac{IBC} system with \me{\mathcal {B}} coordinated \ac{BS} of N transmit antennas each and \me{K} single antenna receivers. The set of all \me{K} users is denoted by \me{\mathcal{U} = \{1,2,\dotsc, K\}}. We assume that data for the \me{k^{th}} user is transmitted only from one BS, which is denoted by \me{b_k \in \mathcal{B}}, where \me{\mathcal{B} \triangleq \{1,2,\dotsc, \mathcal{B}\}} is the set of all \ac{BS}. The set of all users served by BS \me{b} is denoted by \me{\mathcal{U}_b}. Under flat fading channel conditions, the input-output relation for \me{k^{th}} user is given as
+\begin{equation}
+y_k = \mathbf{h}_{b_k,k}^H \mathbf{x}_k  + {n}_k
+\label{precoder1_eqn}
+\end{equation}
+where \me{h_k} is the channel coefficient showing the channel response between transmit and recieve antenna, ie., from \ac{BS} \me{b} to user \me{k} and \me{{n} \thicksim \mathcal{CN}(0,\sigma^{2})} is complex circularly symmetric zero mean gaussian noise with variance  \me{\sigma^2}. The receiver requires information about the channel \me{h_k} to suppress the effect of noise \me{n}. By doing this, complexity is increased, but the receiver has to be simple that, the \ac{BS} can predict the channel.
+
+Under linear precoding the transmitted vector \me{x} can be written as
+\begin{equation}
+\mathbf{x}_k = \sum^K_{i=1} \mathbf{w}_i d_i
+\label{precoder2_eqn}
+\end{equation}
+where, \me{d_i} is normalized data symbol and \me{w_i} is the linear precoding vector. The \ac{SINR} (\me{\gamma_k}) can be written as
+\begin{equation}
+\gamma_k = \frac{ \|\mathbf{h}_{b_k,k} \mathbf{w}_k\|^{2}}{\sigma^{2}+\sum_{i = 1, i \neq k}^{K} \|\mathbf{h}_{b_i,k} \mathbf{w}_{i}\|^{2}}
+\label{precoder3_eqn}
+\end{equation}
+
+For reliable communication achievable commuinication rate can be written as
+\begin{equation}
+C = \mathbf{log}_2(1 + \gamma_k) 
+\label{precoder4_eqn}
+\end{equation}
+where, C is the achievable capacity. The transmission is power limited with a total power constraint as
+\begin{equation}
+\sum_{i = 1}^{K} \|\mathbf{w}_i\|^2 \leq \mathbf{P}.
+\label{precoder5_eqn}
+\end{equation} 
+
+The precoder design can be classified into Centralized and Distributed approach. In the centralized approach all the \ac{BS} share the \ac{CSI}. The centralized controller is equipped to know and calculate the expected sum rate. In distributed approach, practical difficulties of distributing \ac{CSI} over the backhaul network and high complexity of joint precoding design motivates the analysis. The beamforming and power allocation strategies can be computed locally using only local \ac{CSI} in a distributed design. In general, the goal of precoding is to maximize the signal power at the intended terminal while minimizing the interference caused at others. 

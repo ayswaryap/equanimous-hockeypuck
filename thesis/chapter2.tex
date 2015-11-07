@@ -1,0 +1,64 @@
+\selectlanguage{english}
+
+
+
+A centralized coordinated \ac{DL} transmission requires \ac{CSI} to be feedback from the users to their serving \ac{BS}, and aggregated at the central coordination node to form the channel matrix for precoding, so that interference can be mitigated.
+
+%--------------------------------------------------------------------
+%sys model precoder design-------------------------------------------
+%--------------------------------------------------------------------
+
+\section{System Model for \ac{WSRM} }
+
+Consider a downlink \ac{MIMO} \ac{IBC} system with \me{\mathcal {B}} coordinated \ac{BS} of N transmit antennas each and \me{K} single antenna receivers. The set of all \me{K} users is denoted by \me{\mathcal{U} = \{1,2,\dotsc, K\}}. We assume that data for the \me{k^{th}} user is transmitted only from one BS, which is denoted by \me{b_k \in \mathcal{B}}, where \me{\mathcal{B} \triangleq \{1,2,\dotsc, \mathcal{B}\}} is the set of all \acsp{BS}. The set of all users served by BS \me{b} is denoted by \me{\mathcal{U}_b}. Under flat fading channel conditions, the signal received by the \me{k^{th}} user is
+\begin{equation}
+h_k{x}_k = \mvecH{w}{k} \mathbf{h}_{{b_k},k} \mathbf{x}_k  + \mathbf{w}^H_k \sum_{i = 1, i \neq k}^{K} \mathbf{h}_{{b_i},k} \mathbf{x}_i + \mathbf{w}^H_k \mathbf{n}_k
+\label{cent1_eqn}
+\end{equation}
+
+where \me{\mvec{h}{b_i,k} \in \mathbb{C}^{1 \times N}} is the channel (row) vector from BS \me{{b_i}} to user \me{{k}, \mathbf {w}_k \in \mathbb{C}^{N \times 1}} is the beamforming vector (beamformers) from BS \me{{b}_k} to user \me{{k}}, \me{{d}_k} is the normalized complex data symbol, and \me{{n}_k \thicksim \mathcal{CN}(0,\sigma^{2})} is complex circularly symmetric zero mean gaussian noise with variance \me{\sigma^2}. The term \me{\textstyle \sum_{i = 1, i \neq k}^{K} \mathbf{h}_{{b_i},k} \mathbf{w}_i d_i} in \eqref{rx_eqn} includes both intra- and inter-cell interference. The total power transmitted by \acs{BS} \me{b} is \me{\textstyle \sum_{k \in \mathcal{U}_b} \|\mathbf{w}_k\|^{2}}. The \acs{SINR} \me{\gamma_k} of user \me{k} is
+\begin{equation}
+\gamma_k = \frac{ \|\mvec{h}{b_k,k} \mathbf{w}_k\|^{2}}{\sigma^{2}+\sum_{i = 1, i \neq k}^{K} \|\mathbf{h}_{{b_i},k}\|}
+\label{cent2_eqn}
+\end{equation}
+
+Here, we are interested in the problem of \acs{WSRM} under per-\ac{BS} power constraints, which is formulated as
+\begin{equation}
+\max_{\sum_{k \in \mathcal{U}_b} \| \mathbf{w}_k \|^2 \leq {P_b}, \forall \, b \in \mathcal{B} }  \quad \sum_{k = 1}^{K} \alpha_k \log(1 + \gamma_k)
+\label{cent3_eqn}
+\end{equation}
+where \me{\alpha_k}'s are positive weighting factors which are typically introduced to maintain a certain degree of fairness among users.
+
+%--------------------------------------------------------------------
+%prb frmlatn precoder design-----------------------------------------
+%--------------------------------------------------------------------
+
+\section{Problem Formulation}
+
+To achieve a tractable solution for the Low-Complexity beamfomer design, we can write the problem as shown in the following equation,
+
+\begin{equation}
+\max_{\sum_{k \in \mathcal{U}_b} \| \mathbf{w}_k \|^2 \leq {P_b}, \forall {b \in \mathcal{B}} }  \quad          \prod_{k} (1 + \gamma_k)^{\alpha_k}
+\label{cent4_eqn}
+\end{equation}
+
+The equations can be re-written as
+\begin{subeqnarray}
+	\displaystyle \max_{w_k, t_k} \quad && \prod_{k} t_k \slabel{cent5c_eqn}\\
+	\text{subject to} \quad && \gamma_k \geq {t_k}^{1/\alpha_k} - 1 , \forall k \in \mathcal{U}, \slabel{cent5a_eqn} \\
+	&& \sum_{k \in \mathcal{U}_b} \| \mathbf{w}_k \|_2^2 \leq {P_b}, \forall {b \in \mathcal{B}}. \slabel{cent5b_eqn}
+	\label{cent5_eqn}
+\end{subeqnarray}
+
+In equation \eqref{cent5a_eqn} and \eqref{cent5b_eqn} it can be seen that all constraints are active at the optimum, otherwise, we can obtain a larger objective by increasing \me{t_k} without violating the constraints. We can reformulate \eqref{cent5a_eqn} by reintroducing additional slack variable \me{\beta_k},
+
+\begin{subeqnarray}
+	\underset{w_k, t_k, \beta_k}{\text{maximize}} \quad && \prod_{k} t_k \\
+	\text{subject to} \quad && \Re {\mathbf{h}_{{b_k},k} \mathbf{w}_k} \geq \sqrt{{t_k}^{1/\alpha_k} - 1 } \beta_k , \forall k \in \mathcal{U} \slabel{cent6a_eqn}\\
+	&& \Im (\mathbf{h}_{{b_k},k} \mathbf{w}_k) = 0, \forall k \in \mathcal{U}, \slabel{cent6b_eqn} \\
+	&& ({{\sigma^{2}+\sum_{i = 1, i \neq k}^{K} \|\mathbf{h}_{{b_i},k}\mathbf{w}_k}\|^{2}})^{1/2} \leq \beta_k, \forall k \in \mathcal{U}, \slabel{cent6c_eqn} \\
+	&& \sum_{k \in \mathcal{U}_b} \| \mathbf{w}_k \|_2^2 \leq {P_b}, \forall {b \in \mathcal{B}}. \slabel{cent6d_eqn}
+	\label{cent6_eqn}
+\end{subeqnarray}
+
+The relation between \eqref{cent5a_eqn} and \eqref{cent6b_eqn} can be seen as, first, by forcing the imaginary part of \me{\mathbf{h}_{{b_k},k} \mathbf{w}_k} to zero in \eqref{cent6b_eqn} does not affect the optimality of \eqref{cent5b_eqn} since phase rotation on \me{\mathbf{w}_k} will result in the same objective while satisfying all constraints. Second we can show that all the constraints in \eqref{cent6_eqn} hold with equality at the optimum.

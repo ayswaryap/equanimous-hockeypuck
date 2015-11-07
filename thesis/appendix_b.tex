@@ -1,0 +1,17 @@
+
+\section{Convergence Proof for Distributed Algorithm}
+
+The convergence of the distributed algorithms as proposed in Algorithm 1, Algorithm 2 and Algorithm 3 follows the same discussion as in Convergence proof for centralized algorithm, if the sub problem in (4.1) converges to the centralized solution. Slater's condition is a sufficient condition for strong duality to hold for a convex optimization problem, Slater's condition states that the feasible region must have an interior point which is satisfied by (4.1) where, by having a non empty set interior and a compact set as required for the convergence 'reference'. Let us consider each distributed algorithms into our convergence analysis. 
+
+In Primal decomposition, the master subproblem uses subgradient to update the coupling variable (interference vectors) in consensus with the objective function, the convergence of the sub problem is gauranteed as the iteration index tends to infinite for a diminishing step size parameter 'reference'.
+
+In \ac{ADMM} method, we prove the convergence by considering the problem discussed in 'reference'  \me{'boydhttps://web.stanford.edu/~boyd/papers/pdf/admm_slides.pdf'}  by writing the problem as
+\begin{subeqnarray}
+\underset{x, z}{\text{maximize}} \quad && f(x) + g(z) \\
+{\text{subject to}} && Ax = z \\
+&& x \, \in \mathbb{C}_1, z \, \in \mathbb{C}_2 
+\end{subeqnarray}
+
+%write abt ADMM
+
+Let us consider the decomposition via \ac{KKT} conditions for AP-GP method without rate constraint, presented in section 2.A, updates all the optimization variables at once

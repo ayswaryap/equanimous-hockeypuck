@@ -1,0 +1,51 @@
+\section{KKT condition for AP-GP method and MSE Reformulation with and without Rate Constraint}
+
+In order to solve for an iterative precoder design algorithm, the \ac{KKT} expressions for the problem in \eqref{APGP_eqn} and \eqref{apgprc_eqn} are obtained by differentiating the Lagrangian by assuming their constraint.
+
+\subsection{AP-GP without Rate Constraint}
+
+By differentiating the Lagrangian by assuming the equality constraint for \eqref{APGP_eqn}. At stationary points, the following conditions are satisfied.
+
+\begin{subeqnarray}
+&&\nabla_{\gamma_k} \,: \, -\dfrac{-\log_2 e}{1 + \gamma_k} + \dfrac{a_k}{2 \phi_k} \, = \, 0 \\
+&&\nabla_{\beta_k}\, : \, -\dfrac{a_k \phi_k}{2} - b_k\, = \, 0 \\
+&&\nabla_{\mathbf{w}_k} \,: 2 \mathbf{w}_k \left(\sum_{i \neq K} b_i \mathbf{h}_{{b_k},i}^H \mathbf{h}_{{b_k},i}  + c_k \mathbf{I}_{N_T} \; \right )\, = \, a_k \mathbf{h}_{{b_k},k}^H.
+\end{subeqnarray}	
+
+Along with the primal constraints given in \eqref{APGP_eqn}, the complementary slackness must also be satisfied at stationary point. On solving the above equations in (7.1) with the complementary slackness conditions, we get an iterative algorithm for finding the transmit beamformer as shown in \eqref{APGP_kkt}.
+
+\subsection{AP-GP with Rate Constraint}
+
+By differentiating the Lagrangian by assuming the equality constraint for \eqref{APGP_eqn} and \eqref{apgprc2_eqn}. At stationary points, the following conditions are satisfied.
+
+\begin{subeqnarray}
+&&\nabla_{\gamma_k} \,: \,  \dfrac{a_k}{2 \phi_k} - \dfrac{1}{1 - \gamma_k} - d_k \, = \, 0 \\
+&&\nabla_{\beta_k}\, : \, -\dfrac{a_k \phi_k}{2} - b_k\, = \, 0 \\
+&&\nabla_{\mathbf{w}_k} \,: 2 \mathbf{w}_k \left(\sum_{i \neq K} b_i \mathbf{h}_{{b_k},i}^H \mathbf{h}_{{b_k},i}  + c_k \mathbf{I}_{N_T} \; \right )\, = \, a_k \mathbf{h}_{{b_k},k}^H.
+\end{subeqnarray}	
+
+Along with the primal constraints given in \eqref{APGP_eqn} and \eqref{apgprc2_eqn}, the complementary slackness must also be satisfied at stationary point. On solving the above equations in (7.2) with the complementary slackness conditions, we get an iterative algorithm for finding the transmit beamformer as shown in \eqref{apgprckkt_eqn}.
+
+\newpage
+
+\subsection{MSE with Rate Constraint}
+
+By differentiating the Lagrangian by assuming the equality constraint for \eqref{kktmse2_eqn}. At stationary points, the following conditions are satisfied.
+
+\begin{subeqnarray}
+&&\nabla_{\epsilon_k} \,: \, \dfrac{1}{\bar{\epsilon_k}} - a_k  \, = \, 0 \\
+&&\nabla_{\mathbf{w}_k} \,:  \mathbf{w}_k \left(a_k \sum_{i \neq K}  \mathbf{h}_{{b_k},i}^H \mathbf{u}_i^H \mathbf{u}_i \mathbf{h}_{{b_k},i}  + b_k \mathbf{I}_{N_T} \; \right )\, = \, a_k \mathbf{u}_k^H \mathbf{h}_{{b_k},k}.
+\end{subeqnarray}	
+
+Along with the primal constraints given in \eqref{kktmse2_eqn}, the complementary slackness must also be satisfied at stationary point. On solving the above equations in (7.3) with the complementary slackness conditions, we get an iterative algorithm for finding the transmit beamformer as shown in \eqref{kktmse4_eqn}.
+
+\subsection{MSE with Rate Constraint}
+
+In order to solve for an iterative precoder design algorithm, the \ac{KKT} expressions for the problem in \eqref{kktmse2_eqn} and \eqref{kktmserc1a_eqn} are obtained by differentiating the Lagrangian by assuming their constraint.
+
+\begin{subeqnarray}
+&&\nabla_{\epsilon_k} \,: \, \dfrac{1}{\bar{\epsilon_k}} - \dfrac{c_k}{\log \bar{\epsilon_k}} - a_k  \, = \, 0 \\
+&&\nabla_{\mathbf{w}_k} \,:  \mathbf{w}_k \left(a_k \sum_{i \neq K}  \mathbf{h}_{{b_k},i}^H \mathbf{u}_i^H \mathbf{u}_i \mathbf{h}_{{b_k},i}  + b_k \mathbf{I}_{N_T} \; \right )\, = \, a_k \mathbf{u}_k^H \mathbf{h}_{{b_k},k}.
+\end{subeqnarray}	
+
+Along with the primal constraints given in \eqref{kktmse2_eqn} and \eqref{kktmserc1a_eqn}, the complementary slackness must also be satisfied at stationary point. On solving the above equations in (7.4) with the complementary slackness conditions, we get an iterative algorithm for finding the transmit beamformer as shown in \eqref{kktmserckkt_eqn}.
