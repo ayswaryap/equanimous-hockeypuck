@@ -6,17 +6,15 @@ Precoding can be explained as the beamforming method used for multi-stream trans
 
 In point-to-point \ac{MIMO} system, transmitter is equipped with multiple antennas that communicates with a receiver that has multiple antennas. The precoding in point to point case assumes a narrowband slowly fading channel, that is achieved through \ac{OFDM}, and the channel capacity and throughput can be maximized depending on the \ac{CSI} available in the system. If the transmitter has statistical information and the receiver knows the channel matrix then eigen beamforming achieves the \ac{MIMO} channel capacity, where, the transmitter emits multiple streams in eigen directions of the channel covariance matrix. If the channel matrix is completely known, singular-value-decomposition \ac{SVD} precoding is known to achieve the \ac{MIMO} channel capacity, where, the channel matrix is diagonalized by taking an \ac{SVD} and removing the two unitary matrices through pre- and post-multiplication at the transmitter and receiver, respectively, thus, one data stream per singular value can be transmitted without having any interference.
 
-In \ac{MU-MIMO}, a multi-antenna transmitter communicates simultaneously with multiple receivers with one or more antennas known as \ac{SDMA}. Precoding algorithms for \ac{SDMA} systems can be sub-divided into linear and nonlinear precoding types. The capacity achieving algorithms are nonlinear approach but linear precoding approaches usually achieve reasonable performance with much lower complexity. Linear precoding strategies include \ac{MRT},  \ac{ZF} precoding, and transmit Wiener precoding, there are also precoding strategies for low-rate feedback of channel state information. Nonlinear precoding is designed based on the concept of \ac{DPC}, which shows that any known interference at the transmitter can be subtracted without the penalty of radio resources if the optimal precoding scheme can be applied on the transmit signal.
+In \ac{MU}-\ac{MIMO}, a multi-antenna transmitter communicates simultaneously with multiple receivers with one or more antennas known as \ac{SDMA}. Precoding algorithms for \ac{SDMA} systems can be sub-divided into linear and nonlinear precoding types. The capacity achieving algorithms are nonlinear approach but linear precoding approaches usually achieve reasonable performance with much lower complexity. Linear precoding strategies include \ac{MRT},  \ac{ZF} precoding, and transmit Wiener precoding, there are also precoding strategies for low-rate feedback of channel state information. Nonlinear precoding is designed based on the concept of \ac{DPC}, which shows that any known interference at the transmitter can be subtracted without the penalty of radio resources if the optimal precoding scheme can be applied on the transmit signal.
 
-\ac{DPC} is a coding technique that pre-cancels known interference without power penalty. Only the transmitter needs to know this  interference, but full \ac{CSI} is required everywhere to achieve the weighted sum capacity. \ac{DPC} is known as the capacity achieving scheme in the \ac{MIMO} channel. But \ac{DPC} is a Non-linear technique for interference cancellation having higher degree of complexity. Thus, to overcome this we can go for a linear technique considering the problem of  \ac{WSRM} with linear transmit precoding for multicell  \ac{MIMO} downlink. But, the \ac{WSRM} problem, for single-antenna receivers are considered to be NP-hard. Although 
-optimal beamformers can be obtained and they may not be practically useful since the complexity of finding optimal designs grows exponentially with the problem size. Hence, the need of computationally conducive suboptimal solutions to the WSRM problem 
-still remains. Since the \ac{WSRM} problem is nonconvex and NP-hard, there exists a class of beamformer designs which 
-are based on achieving the necessary optimal conditions of the \ac{WSRM} problem.
+\ac{DPC} is a coding technique that pre-cancels known interference without power penalty. Only the transmitter needs to know this  interference, but full \ac{CSI} is required everywhere to achieve the weighted sum capacity. \ac{DPC} is known as the capacity achieving scheme in the \ac{MIMO} channel. But \ac{DPC} is a Non-linear technique for interference cancellation having higher degree of complexity. Thus, to overcome this we can go for a linear technique considering the problem of  \ac{WSRM} with linear transmit precoding for multicell  \ac{MIMO} downlink. But, the \ac{WSRM} problem, for single-antenna receivers are considered to be NP-hard. Although optimal beamformers can be obtained and they may not be practically useful since the complexity of finding optimal designs grows exponentially with the problem size. Hence, the need of computationally conducive suboptimal solutions to the WSRM problem still remains. Since the \ac{WSRM} problem is nonconvex and NP-hard, there exists a class of beamformer designs which are based on achieving the necessary optimal conditions of the \ac{WSRM} problem.
 
 
 %--------------------------------------------------------------------
 %sys model precoder design-------------------------------------------
 %--------------------------------------------------------------------
+\section{System Model and Problem Formulation}
 
 \subsection{System Model}
 
@@ -25,18 +23,30 @@ Consider a downlink \ac{MIMO} \ac{IBC} system with \me{\mathcal {B}} coordinated
 y_k = \mathbf{h}_{b_k,k}^H \mathbf{x}_k  + {n}_k
 \label{precoder1_eqn}
 \end{equation}
-where \me{h_k} is the channel coefficient showing the channel response between transmit and recieve antenna, ie., from \ac{BS} \me{b} to user \me{k} and \me{{n} \thicksim \mathcal{CN}(0,\sigma^{2})} is complex circularly symmetric zero mean gaussian noise with variance  \me{\sigma^2}. The receiver requires information about the channel \me{h_k} to suppress the effect of noise \me{n}. By doing this, complexity is increased, but the receiver has to be simple that, the \ac{BS} can predict the channel.
+where \me{\mathbf{h}_k} is the channel coefficient showing the channel response between transmit and recieve antenna, ie., from \ac{BS} \me{b} to user \me{k} and \me{{n} \thicksim \mathcal{CN}(0,\sigma^{2})} is complex circularly symmetric zero mean gaussian noise with variance  \me{\sigma^2}. The receiver requires information about the channel  \me{\mathbf{h}_k} to suppress the effect of noise \me{n}. By doing this, complexity is increased, but the receiver has to be simple that, the \ac{BS} can predict the channel.
 
 Under linear precoding the transmitted vector \me{x} can be written as
 \begin{equation}
 \mathbf{x}_k = \sum^K_{i=1} \mathbf{w}_i d_i
 \label{precoder2_eqn}
 \end{equation}
-where, \me{d_i} is normalized data symbol and \me{w_i} is the linear precoding vector. The \ac{SINR} (\me{\gamma_k}) can be written as
+where, \me{d_i} is normalized data symbol and \me{w_i} is the linear precoding vector. Under flat fading channel conditions, the signal received by the \me{k^{th}} user is
+\begin{equation}
+\mathbf{h}_k x_k = \mvecH{w}{k} \mathbf{h}_{{b_k},k} \mathbf{x}_k  + \mathbf{w}^H_k \sum_{i = 1, i \neq k}^{K} \mathbf{h}_{{b_i},k} \mathbf{x}_i + \mathbf{w}^H_k \mathbf{n}_k
+\label{cent1_eqn}
+\end{equation}
+where \me{\mvec{h}{b_i,k} \in \mathbb{C}^{1 \times N}} is the channel (row) vector from BS \me{{b_i}} to user \me{{k}, \mathbf {w}_k \in \mathbb{C}^{N \times 1}} is the beamforming vector (beamformers) from BS \me{{b}_k} to user \me{{k}}, \me{{d}_k} is the normalized complex data symbol, and \me{{n}_k \thicksim \mathcal{CN}(0,\sigma^{2})} is complex circularly symmetric zero mean gaussian noise with variance \me{\sigma^2}. The term \me{\textstyle \sum_{i = 1, i \neq k}^{K} \mathbf{h}_{{b_i},k} \mathbf{w}_i d_i} in \eqref{rx_eqn} includes both intra- and inter-cell interference. The total power transmitted by \acs{BS} \me{b} is \me{\textstyle \sum_{k \in \mathcal{U}_b} \|\mathbf{w}_k\|^{2}}. The \acs{SINR} \me{\gamma_k} of user \me{k} is
 \begin{equation}
 \gamma_k = \frac{ \|\mathbf{h}_{b_k,k} \mathbf{w}_k\|^{2}}{\sigma^{2}+\sum_{i = 1, i \neq k}^{K} \|\mathbf{h}_{b_i,k} \mathbf{w}_{i}\|^{2}}
 \label{precoder3_eqn}
 \end{equation}
+
+In this report, we are interested in the problem of \acs{WSRM} under per-BS power constraints, which is formulated as,
+\begin{equation}
+\max_{\sum_{k \in \mathcal{U}_b} \| \mathbf{w}_k \|^2 \leq {P_b}, \forall \, b \in \mathcal{B} }  \quad \sum_{k = 1}^{K} \alpha_k \log(1 + \gamma_k)
+\label{constraint_eqn}
+\end{equation}
+where \me{\alpha_k}'s are positive weighting factors which are typically introduced to maintain a certain degree of fairness among users.
 
 For reliable communication achievable commuinication rate can be written as
 \begin{equation}
@@ -49,4 +59,93 @@ where, C is the achievable capacity. The transmission is power limited with a to
 \label{precoder5_eqn}
 \end{equation} 
 
-The precoder design can be classified into Centralized and Distributed approach. In the centralized approach all the \ac{BS} share the \ac{CSI}. The centralized controller is equipped to know and calculate the expected sum rate. In distributed approach, practical difficulties of distributing \ac{CSI} over the backhaul network and high complexity of joint precoding design motivates the analysis. The beamforming and power allocation strategies can be computed locally using only local \ac{CSI} in a distributed design. In general, the goal of precoding is to maximize the signal power at the intended terminal while minimizing the interference caused at others. 
+\subsection{Problem Formulation}
+
+To achieve a tractable solution for the Low-Complexity beamfomer design, we note that following monotonicity of logarithmic function, \eqref{constraint_eqn} can be formulated as \ac{WSRM} problem as,
+\begin{subeqnarray}
+	\displaystyle \max_{w_k, \gamma_k} \quad && \sum_{k =1}^{K}   \log (1 + \gamma_k) \\
+	\text{subject to} %\quad && \gamma_k \geq {t_k}^{1/\alpha_k} - 1 , \forall k \in \mathcal{U}, \\
+	&& \sum_{k \in \mathcal{U}_b} \| \mathbf{w}_k \|_2^2 \leq {P_b}, \forall {b \in \mathcal{B}}
+	\label{6_eqn}
+\end{subeqnarray}
+where from equation\eqref{6_eqn} we can see that all constraints are active at the optimum, otherwise, we can obtain a larger objective by increasing \me{\gamma_k} without violating the constraints. 
+
+The precoder design for the \ac{MIMO}-\ac{IBC} \ac{OFDM} is difficult because of its non convex nature. In general, the rate maximizing beamformer designs has inherent complexity. The beamformer design can be classified into Centralized and Distributed approach. In the centralized approach all the \ac{BS} share the \ac{CSI}. The centralized controller is equipped to know and calculate the expected sum rate. In distributed approach, practical difficulties of distributing \ac{CSI} over the backhaul network and high complexity of joint precoding design motivates the analysis. The beamforming and power allocation strategies can be computed locally using only local \ac{CSI} in a distributed design. In general, the goal of precoding is to maximize the signal power at the intended terminal while minimizing the interference caused at others. 
+
+\section{Direct SINR Relaxation for AP-GP Approach}
+
+In general, we know that the \ac{WSRM} problem is nonconvex and NP-hard, there exists a class of beamformer designs which are based on achieving the necessary optimal conditions of the \ac{WSRM} problem, as can be seen in, \cite{venturino2010coordinated,ng2010linear,christensen2008weighted,shi2011iterativelyshi2011iteratively}. A centralized coordinated \ac{DL} transmission requires \ac{CSI} to be feedback from the users to their serving \ac{BS}, and aggregated at the central coordination node to form the channel matrix for precoding, so that interference can be mitigated. Before discussing the solutions, let us look into the exsisting \ac{WSRM} algorithm for centralized precoder design with constraints required for the problem.
+
+In this section, let us consider, the problem in \eqref{6_eqn} we can relax the \ac{SINR} expression in \eqref{precoder3_eqn} by introducing inequality constraints to solve \eqref{6_eqn} as,
+\begin{subeqnarray}
+	\displaystyle \max_{w_k, \gamma_k, \beta_k} \quad && \sum_{k=1}^{K} \log (1 + \gamma_k)\\
+	\text{subject to} \quad && \frac{\|\mathbf{h}_{{b_k},k} \mathbf{w}_k\|^2}{\beta_k} \geq \gamma_k , \forall k \in \mathcal{U} \slabel{7b_eqn} \\ 
+	&& \beta_k \geq {\sigma^{2}+\sum_{i = 1, i \neq k}^{K} \|\mathbf{h}_{{b_i},k}\mathbf{w}_k}\|^{2}, \forall k \in \mathcal{U}, \slabel{7d_eqn} \\
+	&& \sum_{k \in \mathcal{U}_b} \| \mathbf{w}_k \|_2^2 \leq {P_b}, \forall {b \in \mathcal{B}}. \slabel{7e_eqn}
+	\label{7_eqn}
+\end{subeqnarray}
+
+The \ac{SINR} expression in \eqref{precoder3_eqn} is relaxed by inequalities in equations \eqref{7b_eqn} and \eqref{7d_eqn}. We can see that \eqref{7b_eqn} is an under estimator of \ac{SINR} equation and \eqref{7d_eqn} gives the upper bound for the total interference seen by all the users k \me{\in \mathcal{U}_b}, which is denoted as \me{\beta_k}. Thus we replace the problem in \eqref{6_eqn} is same as \eqref{7_eqn}. Thus the \ac{WSRM} problem formulated is NP-hard.[ref 23 check!]. 
+
+In order to find a optimal solution for the problem in \eqref{7_eqn}, we can observe that the equation in \eqref{7e_eqn} is the only convex constraint with the involved variables. We can also note that equations \eqref{7b_eqn} and \eqref{7d_eqn} is non convex in nature, thus we must use certain techniques to solve them. The relation between \eqref{6_eqn} and \eqref{7_eqn} is seen as, first, \eqref{7b_eqn} is non convex constraint and taking the square root on both sides we can obtain equations given by
+\begin{subeqnarray}
+	\Re({\mathbf{h}_{{b_k},k} \mathbf{w}_k})  \geq \sqrt{\gamma_k \beta_k} , \forall k \in \mathcal{U} \slabel{8a_eqn}\\
+	\Im ({\mathbf{h}_{{b_k},k} \mathbf{w}_k}) == 0.\slabel{8b_eqn}
+	\label{8_eqn}
+\end{subeqnarray}
+
+The imaginary part is made to zero in \eqref{8a_eqn} does not affect the optimality of \eqref{6_eqn} since phase rotation on \me{\mathbf{w}_k} will result in the same objective while satisfying all constraints. Second we can show that all the constraints in \eqref{7d_eqn} hold with equality at the optimum. We can reformulate \eqref{7_eqn} to find the transmit beamformers \me{\mathbf{w}_k} as
+\begin{subeqnarray}
+	\displaystyle \max_{w_k, \gamma_k, \beta_k} \quad && \sum_{k=1}^{K} \log (1 + \gamma_k)\\
+	\text{Subject to} \quad && \Re( {\mathbf{h}_{{b_k},k} \mathbf{w}_k}) \geq \gamma_k \beta_k , \forall k \in \mathcal{U} \slabel{cent6a_eqn}\\
+	&& \Im (\mathbf{h}_{{b_k},k} \mathbf{w}_k) = 0, \forall k \in \mathcal{U}, \slabel{cent6b_eqn} \\
+	&& \beta_k \geq {{\sigma^{2}+\sum_{i = 1, i \neq k}^{K} \|\mathbf{h}_{{b_i},k}\mathbf{w}_k}\|^{2}}, \forall k \in \mathcal{U}, \slabel{cent6c_eqn} \\
+	&& \sum_{k \in \mathcal{U}_b} \| \mathbf{w}_k \|_2^2 \leq {P_b}, \forall {b \in \mathcal{B}}. \slabel{cent6d_eqn}
+	\label{cent6_eqn}
+\end{subeqnarray}
+
+The optimal transmit precoders in \eqref{cent6_eqn} are obtained by solving the problem iteratively by updating \me{\mathbf{w}_k} from the previous iteration until convergence as discussed in simulation and numerical section. The convergence analysis for this algorithm is discussed in Appendix A.
+
+\section{Reformulation via MSE}
+
+As an alternative method to solve the \ac{WSRM} with \ac{QoS} constraints subject to convex transmit power constraint \me{\mathcal{P}} by exploiting the relationship between \ac{MSE} and achievable \ac{SINR} when the \ac{MMSE} receivers are used at the terminals reference ganesh 4 and 5. The \ac{MSE} \me{\epsilon_k} for a data symbol \me{d_k} is given as
+
+\begin{equation}
+\epsilon_k = \mathbb{E} \left[ (d_k' - d_k)^2\right] = |1 - u_k^H \mathbf{h}_{{b_k},k} \mathbf{w}_k|^2 + \sum_{i \in \bar{\mathcal{U}_b}} \|u_i^H \mathbf{h}_{{b_k},i} \mathbf{w}_i\|^2 + \bar{N_0}
+\label{kktmse_eqn}
+\end{equation}
+where \me{d_k'} is the estimated data symbol or the esitmate of transmit symbol. It must be noted that for fixed recievers, equation \eqref{kktmse_eqn} is a convex function in terms of transmit beamformer \me{\mathbf{w}_k \forall k}. The receive beamformers \me{\mathbf{u}_k \forall k} can be solved directly by evaluating the roots of the gradients of the Lagrangian of our main problem in equation 1. The optimal receive beamformers turn out to be equal to the well known \ac{MMSE} receivers. The optimal receiver is in fact a scaled version of \ac{MMSE} receiver for k users given as
+\begin{eqnarray}
+R_k = \sum_{i=1}^K \mathbf{h}_{{b_k},k} \mathbf{w}_k \mathbf{w}_k^H \mathbf{h}_{{b_k},k}^H + N_0 I_{N_R},  \nonumber \\
+u_k = R_k^{-1} \mathbf{h}_{{b_k},k} \mathbf{w}_k.
+\label{kktmserx_eqn}
+\end{eqnarray}
+
+The \ac{MMSE} receiver in \eqref{kktmserx_eqn} can also be used without compromising the performance. Using the \eqref{kktmserx_eqn} in the \ac{MSE} expression in \eqref{kktmse_eqn} and when \ac{MMSE} receive beamformers are applied for each spatial data stream, the corresponding \ac{SINR} is inversely related to the \ac{MSE} as,
+\begin{equation}
+\epsilon_k = \left(1 + \gamma_k\right)^{-1}.
+\end{equation}
+
+We apply the above equations and reformulate our \ac{WSRM} problem. Also, we note that in the problem formulation above, the receive beamformers is no longer considered as optimization variable. 
+
+Let us consider the objective function that can be written as
+\begin{equation}
+\displaystyle \max \sum_{i=1}^{K} \log{(1 + \gamma_k)} \rightleftarrows \displaystyle \min \sum_{i=1}^{K} \log{\epsilon_k}.
+\end{equation}  
+
+The alternative formulation is non convex so we can take the \ac{SCA} approach (reference) by relaxing the constraint by a sequence of convex subsets by a sequence of convex subsets using first order taylors series expansion around the fixed \ac{MSE} point \me{\bar{\epsilon}_k} as,
+\begin{equation}
+\displaystyle \min \sum_{i=1}^{K} \lbrace{\log \bar{\epsilon}_k + \dfrac{\epsilon - \bar{\epsilon}_k}{\log_2 \bar{\epsilon}_k}\rbrace}.
+\end{equation}
+where, \me{\log_2 \bar{\epsilon}_k} is a constant and \me{\frac{\epsilon_k}{\log_2 \bar{\epsilon}_k}} is a variable. So with all this results, the equivalent optimization problem can be formulated with the objective function as, \me{\text{minimize} -\sum_{i=1}^{K} \log {\epsilon}_k}. Using these approximations for the rate constraint, the problem is solved for optimal transmit precoders \me{\mathbf{w}_k}, \ac{MSE}s \me{\epsilon_k} and the user rates over each sub channel for a fixed revceive beamformer. The optmization sub problem to find the transmit precoders for a fixed recieve beamformer \me{\mathbf{u}_k} is  
+\begin{subeqnarray}
+	\underset{w_k, \epsilon_k, t_k}{\text{maximize}} \quad && \sum_{i = 1}^{K} \frac{\epsilon_k}{\bar{\epsilon_k}}  \\
+	\text{subject to} && \epsilon_k \geq  |1 - u_k^H \mathbf{h}_{{b_k},k} \mathbf{w}_k|^2 + \sum_{i \in \bar{\mathcal{U}_b}} \|u_i^H \mathbf{h}_{{b_k},i} \mathbf{w}_i\|^2 + N_0 \slabel{kktmse2a_eqn}\\
+	&& \sum_{k \in \mathcal{U}_b} \|\mathbf{w}_k \|_2^2 \leq {P_b}, \forall {b \in \mathcal{B}}. \slabel{kktmse2b_eqn}
+	\label{kktmse2_eqn}
+\end{subeqnarray}
+
+The optimal transmit precoders for fixed receiver are obtained by solving the subproblem \eqref{kktmse2_eqn} iteratively by updating the \ac{MSE} point \me{\bar{\epsilon_k}} with \me{\epsilon_k} from the previous iteration until convergence that is discussed in simulation plots. The convergence proof for this algorithm is discussed in Appendix A.
+
+
+

@@ -1,10 +1,10 @@
 \selectlanguage{english}
 
-\section{MIMO- Basics}
+\section{MIMO Model}
 
-\ac{MIMO} is a break through in wireless communication, that uses spatial dimension provided by the N transmit and M receive antennas to combat multipath fading. \ac{MIMO} has become an essential element of wireless communication standards including IEEE 802.11n (Wi-Fi), IEEE 802.11ac (Wi-Fi), and Long Term Evolution (4G).
+\ac{MIMO} is a break through in wireless communication, that uses spatial dimension provided by the \me{N_T} transmit and \me{N_R} receive antennas to combat multipath fading. \ac{MIMO} has become an essential element of wireless communication standards including IEEE 802.11n (Wi-Fi), IEEE 802.11ac (Wi-Fi), and Long Term Evolution (4G).
 
-A \acs{MIMO} network with N number of transmit and M number of receive antennas an extension of antenna array communication, that provides high spectral efficiency (The spectral efficiency can be defined by the total number of information bits per second per Hertz transmitted from one array to another), improves reliability and sensitivity to fading; reduced by spatial diversity that is provided by the multiple paths . There are several advantages of having \acs{MIMO} antennas like gain, spatial and transmit diversity. 
+A \acs{MIMO} network with \me{N_T} number of transmit and \me{N_R} number of receive antennas is extension of antenna array communication that provides high spectral efficiency, where spectral efficiency can be defined by the total number of information bits per second per Hertz transmitted from one array to another, improves reliability and sensitivity to fading; reduced by spatial diversity that is provided by the multiple paths . There are several advantages of having \acs{MIMO} antennas like gain, spatial and transmit diversity. 
 
 The figure represents a typical \ac{MIMO} system where multiple data streams are  transmitted in a single channel at the same time and multiple radios collect the multipath signals.
 
@@ -55,14 +55,14 @@ C = \alpha \log (1 + \gamma)
 \label{bgmimo5_eqn}
 \end{equation}
 
-At high \ac{SNR}, the capacity of the i.i.d. Rayleigh fast fading channel scales like \me{n_min \log} SNR bits/s/Hz, where \me{n_min} is the minimum of the number of transmit antennas \me{n_t} and receive antennas \me{n_r}. Thus, at high \ac{SNR} we obtain degree-of-freedom gain. At low \ac{SNR}, the capacity is approximately \me{n_r} SNR \me{\log_2}e bits/s/Hz. Thus at low \ac{SNR} what we obtain is the recieve beamforming power gain. At all \ac{SNR} the capacity increases linearly with \me{n_min} due to the linear combination of degree of freedom gain and beamforming power gain.
+At high \ac{SNR}, the capacity of the i.i.d. Rayleigh fast fading channel scales like \me{n_min \log} SNR bits/s/Hz, where \me{n_min} is the minimum of the number of transmit antennas \me{n_t} and receive antennas \me{n_r}. Thus, at high \ac{SNR} we obtain degree-of-freedom gain. At low \ac{SNR}, the capacity is approximately \me{n_r} SNR \me{\log_2}e bits/s/Hz. Thus at low \ac{SNR} what we obtain is the recieve beamforming power gain. At all \ac{SNR} the capacity increases linearly with \me{n_min} due to the linear combination of degree of freedom gain and beamforming power gain. Various types of \ac{MIMO} system configration are presented in the following sub sections.
 
 %The \ac{MIMO} information-theoretic performance bound of the system can be explained here while Capacity increases linearly at low \ac{SNR} but increases logarithmically at high \acs{SNR}. The linear region is the Bandwidth limited region and the logarithmic region is power limited region, since in low \ac{SNR} region the capacity which is defined as C = log (1 + SNR) where \ac{SNR} value is small so effectively we have log(1) like wise for high \ac{SNR} value the log(1 + SNR) term is effectively \ac{SNR} since for higher values log term increases slowly. 
 %-----------------------------------------------------------------------------
 %  MIMO ibc
 %-----------------------------------------------------------------------------
 
-\section{MIMO-IC}
+\subsection{MIMO-IC}
 \ac{MIMO} communication systems has been showing a great potential in increasing the average throughput in the wireless communication scenario. Due to the performance gain in channel capacity and spectral efficiency in point to point \ac{MIMO} systems has made the inclusion of singe user \ac{MIMO} in different communication stansards. SU-\ac{MIMO} has proved its efficiency to enhance the perormance in wireless networks. But, in cellular systems the available spectrum is very costly and is scarce so such systems has to deal with the inter-cell interference which doesnot exists in isolated point to point systems.
 
 \begin{figure}[h]
@@ -79,7 +79,7 @@ Interference is a major set back and a limiting factor in the wireless communica
 %-----------------------------------------------------------------------------
 
 
-\section{MIMO-IBC}
+\subsection{MIMO-IBC}
 
 The linear transceiver design problem is considered in a \ac{MIMO}-\ac{IBC}, in which a set of \ac{BS}s send data to their intended users. Both the \ac{BS}s and the users are equipped with multiple antennas, and they share the same time/frequency resource for transmission. The objective is to maximize the minimum rate among all the users in the network, in order to achieve fairness.
 
@@ -100,10 +100,10 @@ Optimal  precoder  design  for  \ac{WSRM} in \ac{MIMO} interference networks  is
 %-----------------------------------------------------------------------------
 
 
-\section{Mathematical Preliminaries}
-\subsection{Convex Optimization}
+\section{Mathematical Preliminaries - Convex Optimization}
+%\subsection{Convex Optimization}
 
-\subsubsection{Convexity}
+\subsection{Convex functions and sets}
 Convexity is also called convex analysis, which is an area in mathematics where one studies about convex sets and convex functions. Convexity is also the mathematical core of optimization [1], where it plays an important role in statistics, differential equations and mathematical economics. Convexity can also be called as convex analysis. Some examples of convex sets are triangle, rectangle, polyhedron and quadratic equations.[1]. 
 \begin{figure}[h]
 	\begin{center}
@@ -111,7 +111,7 @@ Convexity is also called convex analysis, which is an area in mathematics where 
 		\caption{Convex Functions}
 	\end{center}
 \end{figure}
-\subsection{Convex Sets}
+\subsubsection{Convex Sets}
 Consider \me{\mathcal{K}} is a set of \me{\mathcal{R}^n} is said to be convex when the line segment through the points \me{x, y} belongs to \me{\mathcal{K}}. In general, the points must lie inside the set and the set is connected such that without leaving the set we can pass through any two points. As mentioned above there are several examples for convex sets like ellipsoid, hypercubes etc. We can also define that the intersection of any convex sets is a convex set.[2]. 
 A set that is not convex is called non convex set or also called as concave set. We can define a non convex set by considering a line segment joining the points \me{x, y} lies outside the set \me{\mathcal{K}}.
 \begin{figure}[h]
@@ -133,7 +133,7 @@ f(\theta x + (1 - \theta) y) < \theta f(x) + (1 - \theta) f(y)
 \end{equation}
 A function \me{f} is said to be concave if the function -\me{f} is strictly convex. Strict convexity means that the graph of \me{f} lies below the segment \me{\mathcal{S}}. Certain examples of strict convex functions are exponential and quadratic function. Several operations on these function preserves the convexity like summation, multiplication of convex functions. 
 
-\subsubsection{Optimization Problem}
+\subsection{ General Optimization Problem}
 
 A generic optimization problem is similar to linear programming problem, that can be solved quickly depending on the variables and the constraints. The objective and the constraints must be linear for the problem to be convex. In general, a convex optimization problem has all of the constraints as convex functions, and the objective is a convex function of minimizing, or a concave function of maximizing. 
 
@@ -144,7 +144,7 @@ The standard form of optimization problem can be written as,
 \end{eqnarray}
 where, \me{f(x): {\mathbb{R}^n} \rightarrow {\mathbb{R}}} is the objective function that has to be minimized with respect to \me{x} and \me{\mathcal{X}} \me{\subset} \me{{\mathbb{R}^n}} is the feasible set. A maximization problem can be written by negating the objective function.
 
-\subsubsection{Convex Problem}
+\subsubsection{Convex Optimization}
 
 A convex optimization problem is one which has both the objective and the given set of constraint as convex. In general linear functions are convex so the linear programming problem is convex problem. A general convex optimization problem can be written as
 \begin{eqnarray}
@@ -157,12 +157,12 @@ where, \me{f(x): {\mathbb{R}^n} \rightarrow {\mathbb{R}}} is the objective funct
 The optimality condition for a convex problem; assume a feasible point \me{\mathbf{x}^*} but it is necessary to know if this point is the optimal solution. We can consider the gradient of a function \me{f} that shows the ascent direction of the function. Gradient of \me{f} at a point \me{x} divides the space into three regions one where the function increases, one where the function decreases and the one where we cannot figure out using the gradient alone. For \me{\mathbf{x}^*} to be optimal and the feasible region doesn't lie in the half space where the function decreases, if not then the point \me{\mathbf{x}^*} is not the optimal point. Convexity makes this condition sufficient for optimality. 
 \par
 To find solution for an unconstrained objective, we differentiate the objective function with respect to the optimization variable \me{x} and equate to zero as \me{\nabla f(x) = 0}. However for an constrained problem, we solve the Lagrangian as
-\begin{equation}
+\begin{eqnarray}
 \underset{\lambda}{\text{maximize}} \quad \underset{x}{\text{minimize}} \quad  L(x,\lambda_1, \dotsc,\lambda_m) =  f(x) + \lambda_1 g_1(x) + \dotsc + \lambda_m g_m(x) + \mu_1 h_1 (x) + \dotsc + \mu_p h_p(x),
-\end{equation}
+\end{eqnarray}
 where \me{\lambda_i \geq 0} and \me{\mu_j} are Lagrange multipliers. In order to solve the constrained problem, similar to the unconstrained problem we take the partial derivative of the Lagrangian with respect to the optimization variable.
 \par
-When the objective is convex, and the equality conditions are affine and the inequality conditions are convex then one of the possible solutions, in some minimum principle is equivalent to \ac{KKT} optimality conditions. To solve a convex optimization problem as above with the \ac{KKT} approach we need the lagrange multiplier. There exists \me{\lambda_1, \lambda_2, \dotsc, \lambda_m, \mu_1, \dotsc, \mu_p}, called the Lagrange multipliers, for each point \me{x \in X} that minimizes f over \me{\mathcal{X}}. The Lagrange multipliers must satisfy certain conditions:\\
+When the objective is convex, and the equality conditions are affine and the inequality conditions are convex then one of the possible solutions, in some minimum principle is equivalent to \ac{KKT} optimality conditions. To solve a convex optimization problem as above by using \ac{KKT} expressions we need lagrange multiplier. There exists \me{\lambda_1, \lambda_2, \dotsc, \lambda_m, \mu_1, \dotsc, \mu_p}, called the lagrange multipliers, \me{\forall x \in X} that minimizes f over \me{\mathcal{X}}. The Lagrange multipliers must satisfy certain conditions:\\
 1. \me{{x} \quad minimizes \quad L(z, \lambda_1, \lambda_2, \dotsc, \lambda_m),   \forall z \in X},\\
 2. \me{\lambda_1 \geq 0, \lambda_2 \geq 0, \dotsc, \lambda_m \geq 0},\\
 3. Complementary Slackness: \me{\lambda_1 g_1 = 0, \lambda_2 g_2 = 0, \dotsc, \lambda_m g_m = 0}.\\
@@ -170,7 +170,7 @@ When the objective is convex, and the equality conditions are affine and the ine
 When the problem is has a convex objective and non convex constraint set then \ac{KKT} method is not a feasible approach. 
 
 
-\subsubsection{Non Convex Problem}
+\subsection{Non Convex Optimization}
 
 A non convex problem is the one that has objective or any one of its constraint as non convex. Such problems have multiple feasible regions and multiple local minima in a region. An example for a non convex function would be a sine wave. Let us consider a non convex problem,
 \begin{eqnarray}
@@ -180,7 +180,7 @@ A non convex problem is the one that has objective or any one of its constraint 
 \end{eqnarray} 
 with variable \me{x \in \mathbb{R}^n}
 \par
-Let us consider a non convex problem when the objective function \me{f(x)} is convex and the inequality constraint \me{g_i(x)}, \me{i=1,\dotsc,n}  is differentiable convex function and \me{g_i(x)}  \me{i= (n+1),\dotsc,m} are differentiable function and the linearity constraint is affine. These non convex problems are common in wireless communication and this is our interest. In order to solve this problem the non convex part of the objective is approximated around a convex function to solve in an iterative manner. 
+Let us consider a non convex problem when the objective function \me{f(x)} is convex and the inequality constraint \me{g_i(x)}, \me{i=1,\dotsc,n}  is differentiable convex function and \me{g_i(x)}  \me{i= (n+1),\dotsc,m} are differentiable function and the linearity constraint is affine. These non convex problems are quite common in the modelling of wireless communication under some objective and constraint therefore it is of great importance and this is our interest. Therefore, solve this problem the non convex part of the objective is approximated around a convex function to solve in an iterative manner. 
 \par
 As mentioned in the paper gordon.p. wright the inner approximation algorithm for the minimization problem can be done in the following steps,\\
 \par
@@ -204,4 +204,8 @@ Let \me{h^k = min \lbrace g_0(x)|x \in F^k \rbrace}.\\
 step 3. If \me{h^k = h^(k-1)}, then \me{x^k} is a \ac{KKT} solution for the minimization problem. Otherwise, let \me{a^k = \lbrace x|h^k = g_0(x)} and \me{x \in F^k \rbrace} and return to step 1.\\
 \par
 The above algorithm proposed by WRIGHT can be used to optimize non linear programs even when the constraint is a non convex function. The objective is replaced with a new variable and is added into the constraint set. As mentioned in the paper, the solution for the algorithm is not only the \ac{KKT} point but also the global minimum for approximating convex problem that is interior to the feasible region.
+
+\section{Real Analysis}
+
+
 

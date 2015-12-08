@@ -1,353 +1,81 @@
 \selectlanguage{english}
 
-In the distributed precoder design, the precoders are designed independently at each \ac{BS}. The convex formulation in the above equation requires a centralized controller to perform the precoder design for all users belonging to the coordinating \ac{BS}s. To design the precoders independently at each \ac{BS} with lesser information exchange via backhaul, iterative decentralized methods are used. In general, the decentralized approaches are mainly based on primal or the alternating method of multipliers \ac{ADMM} schemes. 
+\selectlanguage{english}
 
-\section{Problem Formulation}
+The Simulation work for this thesis work was carried out in MAT Lab, considering a \ac{PL} model that varies uniformly across all the users in the system with the channels drawn from the i.i.d samples. The behavior of the proposed decentralized algorithm is considered for different cell system. The systems convergence behavior and robustness is studied. 
 
-We consider the convex sub problem with fixed receive beamformers \me{w_k} based on Taylors series approximation for the non convex constraint. The objective function of equation \eqref{cent5c_eqn} can be decoupled across each \ac{BS} as 
-\begin{subeqnarray}
-	\sum_k \log(1 + \gamma_k) \geq \log(1 + \gamma_k)\\
-	\prod_k (1 + \gamma_k) \geq (1 + \gamma_k)
-\end{subeqnarray}
-thus the centralized problem can be represented in equivalent form as
-\begin{subeqnarray}
-	\underset{w_k, \beta_k}{\text{maximize}} \quad && \sum_{k=1}^{K} \log(1 + \gamma_k)  \\
-	\text{subject to} \quad && \eqref{cent6a_eqn} - \eqref{cent6d_eqn}
-\end{subeqnarray}
-where, \me{\log(1+\gamma_k)} represents the vector of weighted sum of users \me{k \in \mathcal{U}_b}. Let us consider \me{\mathcal{U}_b} as, the users from my \ac{BS} and \me{\mathcal{U}_{\bar{b}}} as the users from the interfering \ac{BS}. The set of all \me{K} users is denoted by \me{\mathcal{U} = \{1,2,\dotsc, K\}}. We assume that data for the \me{k^{th}} user is transmitted only from one BS, which is denoted by \me{b_k \in \mathcal{B}}, where \me{\mathcal{B} \triangleq \{1,2,\dotsc, \mathcal{B}\}} is the set of all \ac{BS}. The set of all users served by BS \me{b} is denoted by \me{\mathcal{U}_b}. 
+To begin with we consider a \ac{MIMO} model with operating point at 10 dB \ac{SNR}, we consider a system with \me{N_B \, = 2} \ac{BS}s, each equipped with \me{N_T\, = 4} transmit antennas serving \me{k = 3} users each. The allocations for \ac{BS} and users are made by selecting the \ac{BS} with the lowest \ac{PL} component. Fig. 1 (a) shows the  performance of distributed schemes for single antenna recieve system. From the figure a comparission can be made in terms of total rate after each \ac{SCA} update. In figure 1 we can see that all the distributed algorithms converge to the same point
 
-The problem can be decentralized or distributed with the \ac{BS} specific interference vector term, which can be fixed or can be used as a variable depending on the choice of our decomposition method. The given convex problem can be decomposed to parallel iterative subproblems cordinated by primal or dual decomposition update. The coupling variables are updated in each iteration by interchanging the given information within the subproblem. 
-
-\section{Alternating Direction Method of Multipliers (\acs{ADMM}) Schemes}
-
-In the Primal decomposition method, the convex problem can be solved for optimal transmit precoders in an iterative manner for fixed \ac{BS}. Using a master-slave model the problem can be solved, where the slave problem is solved in the corresponding \ac{BS} for optimal tranmit precoders. Upon finding the optimal transmit precoder in the subproblem, the master problem is used to update the \ac{BS} specific interference term for the next iteration by using the dual variables corresponding to the interference constraint. Thus these steps are continued further until a global optimal solution is obtained. The primal problem is similar to the minimum power precoder design as shown in paper "g. scutari". Hence, the master problem treats the interference term as variable where as, in the slave the interference term is considered as a constant for every iteration. 
-
-The \ac{ADMM} method is used to decouple the precoder design across multiple \ac{BS}s inorder to solve the convex problem. In contrary with the primal decomposition method,  dual composition method reduces the constraint by considering the objective functions in the sub problem. The \ac{ADMM} approach is prefered over dual decomposition method due to its robustness and improved convergence. In this method we hold a local and a global copy of the signal interference. At optimality the copies remain equal.
-\acs{ADMM} method can be formulated as following,
-
-\begin{subeqnarray}
-	\underset{\substack{w_k, t_k, \beta_k, \\ \delta^{b_k}_{b,k}, \delta^{b_k}_{b_k,i}}}{\text{maximize}} \quad && \sum_{k} \log {t_k} +\sum_{k \in \mathcal{U}_{b_k}}\sum_{b \in {\bar{\mathcal{B}}}_{b_k}} \lambda^{b_k}_{b,k}{( {\delta ^{b_k}_{b,k} - \delta^G_{b,k} })}+ \sum_{i \in {\bar{\mathcal{U}}_{b_k}}} \lambda^{b_k}_{b_k,i}{( {\delta ^{b_k}_{b_k,i} - \delta^G_{b_k,i}})} - \nonumber \\
-	&&{\frac \rho {2}} \sum_{k \in \mathcal{U}_{b_k}}\sum_{b \in {\bar{\mathcal{B}}}_{b_k}}\|\delta ^{b_k}_{b,k} - \delta^G_{b,k} \|^{2}_{2}-{\frac \rho {2}}\sum_{i \in {\bar{\mathcal{U}}_{b_k}}} \|\delta ^{b_k}_{b_k,i} - \delta^G_{b_k,i} \|^{2}_{2} \\
-	\text{subject to} \quad && \mathbf{h}_{{b_k},k} \mathbf{w}_k \geq \beta_k  \sqrt{({t_k}^{1/\alpha_k} - 1) } , \forall k \in \mathcal{U}_{b_k} \slabel{8b_eqn}\\
-	&& \mathrm{Im}(\mathbf{h}_{{b_k},k} \mathbf{w}_k) = 0, \forall k \in \mathcal{U}_{b_k}, \slabel{8c_eqn} \\
-	&& {{\sigma^{2}+\sum_{\substack{i \in \mathcal{U}_{b_k} \\i \neq k}} \|\mathbf{h}_{{b_k},k}\mathbf{w}_i}\|^{2}}+\sum_{b \in {\bar{\mathcal{B}}}_{b_k}} \delta ^{(b_k)}_{b,k}  \leq \beta_k, \forall k \in \mathcal{U}_{b_k}, \slabel{8d_eqn} \\
-	&&\delta ^{(b_k)}_{b,j} \geq \sum_{i \in {\mathcal{U}}_{b}} \|\mathbf{h}_{{b_k},k}\mathbf{w}_i\|^{2}, \slabel{8e_eqn} \forall j \in {\bar{\mathcal{U}}}_{b_k} \\
-	&& \sum_{k \in \mathcal{U}_b} \| \mathbf{w}_k \|_2^2 \leq {P_b}, \forall {k \in \mathcal{U}_{b_k}}. \slabel{8f_eqn}
-	\label{8_eqn}
-\end{subeqnarray}
-
-In the equation above the objective function of the precoder design is to maximize the sum rate (WSRM)problem. The ADMM method uses the sub gradient update method, where we assume the interference term from the adjascent BS. The \me{\delta ^{(b_k)}} is the local interference term taken into account from the adjascent BS, similarly the \me{\delta ^{(G)}} is the global interference term taken into account from the adjascent BS.At optimality the local and the global interference terms becomes same. The equation \eqref{8b_eqn} and the equation \eqref{8c_eqn} remains the same as the previous formulation. In the equation \eqref{8d_eqn} we observe that there is the local interference term coming from the adjascent BS adding into the noise plus the interference from the same BS. Similarly equation \eqref{8e_eqn} shows the sum of all interefrence terms from the adjascent BS.
-
-\begin{algorithm}[h]
-	\caption[Distributed Precoder Design]{ADMM Method}
-	\label{algo-1}
-	\begin{algorithmic}
-		\label{algo--1}
-		\STATE \textbf{Input:} \me{\alpha_k, \mathbf{h}_{b_k,k}, \forall b \in \mathcal{B}, \forall k \in \mathcal{U}_b}.
-		\STATE \textbf{Output:} \me{\mathbf{w}_k, \forall k \in \lbrace{1,2,\dotsc,K \rbrace}}
-		\STATE \textbf{Initialization:} \me{i = 0} and \me{\mathbf{w}_k} satisfying (5.5f)\\
-		precoders randomly satisfies the power constant \me{\sum_{k \in \mathcal{U}_b} \| \mathbf{w}_k \|_2^2 \leq {P_b}, \forall {k \in \mathcal{U}_{b}}}
-		\STATE initialize global interference vector \me{\delta^{(0)} = 0^T}
-		\STATE initialize interference threshold \me{\lambda \forall b \in \mathcal{B}}\\
-		\STATE \textbf{for each} \ac{BS} \me{b \in \mathcal{B}} perform the following procedure
-		\REPEAT 
-		\STATE initialize \me{j = 0} 
-		\REPEAT	
-		\STATE solve the precoders \me{\mathbf{w}_k} and local interference \me{\delta^{{b_i},k}} using the equation.
-		\STATE exchange \me{\delta^{b}} across the co-ordinating \ac{BS} \me{\mathcal{B}}
-		\STATE update dual variable \me{\lambda} using equation
-		\STATE update the global interference
-		\UNTIL {convergence \me{j \geq J_{max}}}\\
-		\STATE update the beamformer \me{\mathbf{w}_k} with the recent precoder.\\ 
-		\STATE exchange the receive precoder \me{\mathbf{w}_k \forall k \in \mathcal{U}_b} among the \ac{BS}.\\
-		Update \me{\beta_k} with the precoder \me{\mathbf{w}_k}
-		i=i+1
-		\UNTIL {convergence \me{i \geq I_{max}}}
-	\end{algorithmic} 
-\end{algorithm}
-
-Let us consider a two base station scenario such that the global interference term can be updated as follows,
-
-\begin{equation}
-\delta ^ {G}_{b,k} ={ \frac 1 {2}}{(\delta^{(b)}_{b,k}+\delta^{(b_k)}_{b,k})}
-\label{deltaupdate_eqn}
-\end{equation}
-
-where \me{\delta^{(b)}_{b,k}} refers to the actual interference caused by BS \me{b} and \me{\delta^{(b_k)}_{b,k}} refers to the local interference caused by the BS \me{b_k}.
-
-The update for the local interference term is made through iteration of the objective function in each BS. Once the local interference iterations are done then the global interference and the dual variable update are made in the main problem. The dual variable corresponds to the interference terms in the BS \me{b_k} and is updated with the sub gradient method. \me{\rho} gives the dual update step length depending upon the system performance and convergence behaviour. The convergence nature  of the distributed algorithm depends upon the choice made on step size. The distributed precoder design based on \ac{ADMM} is shown in Algorithm 1. The convergence for distributed algorithm is discussed in the Appendix
-
-\begin{equation}
-\lambda ^ {(n+1)}_{b,k} = \lambda ^ {(n)}_{b,k} - \rho{(\delta^{(b_k)^*}_{b,k}-\delta^{(G)^*}_{b,k})}
-\label{update_eqn}
-\end{equation}
-
-\section{Karush Kuhn Tucker \ac{KKT} based Decomposition}
-
-In order to decentralize the precoder design across the coordinating \ac{BS}s in \me{\mathcal{B}} we consider the \ac{KKT} based decentralization approach for \ac{AP-GP} method, \ac{MSE} and Rate reformulation method. Our optimization problem can be solved using the \ac{KKT} conditions. In this \ac{KKT} approach, the transmit precoders and subgradiant updates are performed at the same instant within few number of iterations. In the \ac{ADMM} method we have signaling overhead due to information exchange about the coupling variable, thus if the number of iterations required for the convergence is large, then it many not be practically viable.
-
-The \ac{KKT} approach is practical due to the limited signaling requirement in each iteration. This approach has been considered in "ref. ganesh 8 and 9". We understand that the distributed approach discussed above using \ac{ADMM} may not be viable due to the signalling overhead involved in exchanging the coupling variable when the number of iterations required to converge is large that depends on the size of the system. 
-
-\subsection{KKT for AP - GP Method without Rate Constraint}
-
-In this section we discuss a way to decentralize the precoder design across the corresponding \ac{BS} in \me{\mathcal{B}} based on \ac{AP-GP} method. In contrast to the centralized and \ac{ADMM} method, the problem is solved using the \ac{KKT} conditions. The weighted sum rate maximization problem with \ac{QoS} constraints subject to convex transmit power constraint \me{\mathcal{P}} is considered. The problem in the general form is written as,
-
-\begin{subeqnarray}
-	\underset{\mathbf{w}_k, \gamma_k, \beta_k}{\text{maximize}} \quad && \sum_{k} \log_e (1+ \gamma_k) \\
-	\text{subject to} \quad 
-	&& a_k: \|\mathbf{h}_{{b_k},k} \, \mathbf{w}_k \|^2 \geq  \sqrt{\gamma_k \beta_k}, \slabel{APGPa_eqn}\\
-	&& b_k: {\sigma^{2}+\sum_{\substack{i = 1, \\ i \neq k}}^{K} \|\mathbf{h}_{{b_i},k}\mathbf{w}_i\|^{2}} \leq \beta_k, \forall i \in {\bar{\mathcal{U}}}_{b_k} , \slabel{APGPb_eqn} \\
-	&& c_k: \sum_{k \in \mathcal{U}_b} \|\mathbf{w}_k \|_2^2 \leq {P_b}, \forall {b \in \mathcal{B}}.\slabel{APGPc_eqn}
-	\label{APGP_eqn}
-\end{subeqnarray}
-
-The variable \me{a_k, b_k, c_k} are dual variables corresponding to equations from \eqref{APGPa_eqn} - \eqref{APGPc_eqn} which is the constraints. The optimization variables are the precoder vector \me{\mathbf{w}_k \in \mathbb{C}^{N_T} \forall k}, where k= 1,2,\me{\dotsc},K. 
-
-In the above problem the equation \eqref{APGPa_eqn} can be seen as a non convex constraint and we can decompose the right hand side of the constraint \me{\sqrt{\gamma_k \beta_k}}  into \me{\dfrac{ 1 }{2  \phi_k}  \gamma_k + \dfrac {\phi_k}{2} \beta_k}, where \me{\phi_k} can be written as, \me{\phi_k = \dfrac{\gamma_k}{\beta_k}}. Now the constraint in \eqref{APGPa_eqn} can be written as
-\begin{subeqnarray}
-	a_k: \Re \{\mathbf{h}_{{b_k},k} \mathbf{w}_k \} \geq \dfrac{ 1 }{2  \phi_k}  \gamma_k + \dfrac {\phi_k}{2} \beta_k , \forall k \in \mathcal{U}, \nonumber \\
-	\Im \{\mathbf{h}_{{b_k},k} \mathbf{w}_k\} == 0, \forall k \in \mathcal{U}.
-	\label{APGP1_eqn}
-\end{subeqnarray}
-
-Now we can replace the equation in \eqref{APGPa_eqn} with \eqref{APGP1_eqn}. The Lagrangian function for the given problem can be written as
-\begin{eqnarray}
-L(\gamma_k, \beta_k, \mathbf{w}_k) = -\log_e (1 + \gamma_k) \log_2 e + a_k \left( \frac{ 1 }{2  \phi_k}  \gamma_k + \frac {\phi_k}{2} \beta_k - \mathbf{h}_{{b_k},k} \mathbf{w}_k \right)  \nonumber \\
-+ b_k \left({\sigma^{2}+\sum_{\substack{i = 1, \\ i \neq k}}^{K} \|\mathbf{h}_{{b_i},k}\mathbf{w}_i\|^{2}} - \beta_k  \right) + c_k \left(\sum_{k \in \mathcal{U}_b} \|\mathbf{w}_k \|_2^2-\beta_k  \right).
-\label{APGPL_eqn}
-\end{eqnarray}
-
-By evaluating the Lagrangian function in \eqref{APGPL_eqn} with respect to the primal and dual variables we obtain an iterative solution as 
-\begin{program}
-	\begin{equation}
-	\arraycolsep=4pt\def\arraystretch{3}
-	\begin{array}{rcl}
-	a_k^{(i)} & \longrightarrow & \dfrac{\phi_k^{(i)}}{1 + \gamma_k^{(i-1)}}\\
-	b_k^{(i)} & \longrightarrow & \dfrac{a_k^{(i)} \phi_k^{(i)}}{2} \\
-	\mathbf{w}_k^{(i)} & \longrightarrow & \dfrac{a_k^{(i)}}{2} \left (\; \displaystyle \sum_{i \neq K} b_i^{(i)} \mathbf{h}_{{b_k},i}^H \mathbf{h}_{{b_k},i}  + c_k \mathbf{I}_{N_T} \; \right )^{-1} \mathbf{h}_{{b_k},k}^H \\
-	\gamma_k^{(i)} & \longrightarrow & 2 \phi_k^{(i)}  \left ( \, \Re\{\mathbf{h}_{{b_k},k} \mathbf{w}_k \} - \dfrac{\phi_k^{(i)} \beta_k}{2} \, \right ) 
-	\end{array}
-	\label{APGP_kkt}
-	\end{equation}
-	\caption{Update Procedure}
-\end{program}
-
-Since the dual variable \me{a_k^{(i+1)}} is dependent on \me{\phi_k^{(i)}}, one has to be optimized first to optimize the other. Here, \me{a_k^{(i+1)}} is fixed to evaluate \me{\phi_k^{(i)}}. In every iteration the dual variables are linearly interpolated between the fixed iterate \me{a_k^{(i)}}.
-
-The \ac{KKT} expression in \eqref{APGP_kkt} is solved in an iterative manner by initializing the dual variable \me{a_k} with ones to have equal priorities among the user set in the system. The transmit precoder \me{\mathbf{w}_k} in equation \eqref{APGP_kkt} depends on the \ac{BS} specific dual variable \me{c_k}, which is found by the bisection search satisfying the total power constraint in \eqref{APGPc_eqn}.
-
-Inorder to obtain a possible practical decentralized precoder design, we consider that the \ac{BS} \me{b} knows the initial channel \me{\mathbf{h}_{b_k,k} \forall k}. Once, after receiving the updated transmit precodersfrom all \ac{BS}s in \me{\mathcal{B}}, each user evaluates its corresponding precoder vector and is notify that to the \ac{BS} via \ac{UL} precoded pilots. On obtaining the pilots the \ac{BS} updates all the values. Using the current updated values the \me{a_k^{(i)}, b_k^{(i)}, \mathbf{w}_k^{(i)}, \gamma_k^{(i)}} are valuates using \eqref{APGP_kkt} and the updated dual variables are exchanged between the \ac{BS} to evaluate the transmit precoders for the next iteration.
-
-The users belonging to a particular \ac{BS}s perform all the processing that is required and will update the precoders based on the feedback information from the user, inorder to avoid back haul exchanges within the \ac{BS}. Once the transmit precoders are obtained from the \ac{BS}, every user update their dual variables \me{a_k^{(i)}} and \me{b_K^{(i)}} and the transmit precoder \me{\mathbf{w}_k} and rate \me{\gamma_k} is updated. After recieving the updates the \ac{BS} use the effective channel to update the transmit precoders. Algorithm 2 gives a practical way for updating the transmit precoders for the \ac{KKT} based AP-GP reformulated \ac{WSRM} problem. The convergence analysis for the algorithm is discussed in the Appendix.
-
-\begin{algorithm}
-	\caption[Distributed Precoder Design]{KKT for AP-GP Method with and without Rate Constraint}
-	\label{algo-2}
-	\begin{algorithmic}
-		\label{algo--2}
-		\STATE \textbf{Input:} \me{\alpha_k, \mathbf{h}_{b_k,k}, \forall b \in \mathcal{B}, \forall k \in \mathcal{U}_b}.
-		\STATE \textbf{Output:} \me{\mathbf{w}_k, \forall k \in \lbrace{1,2,\dotsc,K \rbrace}}
-		\STATE \textbf{Initialization:} \me{i = 1} , dual variables	\me{{a_k}^{(0)} = 1}, and \me{I_{max}} for certain value
-		\REPEAT
-		\STATE \textbf{for each} \ac{BS} \me{b \in \mathcal{B}} perform the following procedure
-		\STATE update \me{\mathbf{w}_k^{(i)}} using (5.13) and perform the downlink pilot transmission
-		\STATE evaluate \me{\gamma_k^{(i)}, \phi_k^{(i)}, a_k^{(i)}} using the equations. 
-		\IF {Rate constraint exists}
-		\STATE evaluate \me{d_k^{(i)}} using equation (5.25)
-		\STATE update dual variable \me{a_k^{(i)}} using the equation (5.24)
-		\ENDIF
-		\STATE using the precoded uplink pilots \me{\mathbf{w}_k^{(i)}} and \me{a_k^{(i)}} are notified to all \ac{BS} in \me{\mathcal{B}}
-		\UNTIL {convergence or \me{i \geq I_{max}}}\\
-	\end{algorithmic} 
-\end{algorithm}
-%The above problem turns out to be non convex due to constraint in the equation \eqref{10_b}. Inorder to have a convex problem we need to linearize the equation \eqref{10_b} by taking the first order approximation of the expression \me{\|\mathbf{h}_{{b_k},k} \, \mathbf{w}_k \|^2} in the LHS.
+\begin{figure}
+	\centering
+	\begin{subfigure}[b]{0.75\textwidth}
+		\centering
+		\includegraphics[width=0.75\textwidth]{plot8142}
+		\caption{Convergence of sum rate with $N_\mathrm{T} = 8, B = 2, K = 4$, Mobile users}
+		\label{fig_1}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.75\textwidth}
+		\centering
+		\includegraphics[width=0.75\textwidth]{plot8182}
+		\caption{Convergence of sum rate with $N_\mathrm{T} = 8, B = 2, K = 8$, Mobile users}
+		\label{fig-2}
+	\end{subfigure}
+	\caption{Sum rate convergence for mobile users}
+	\label{figII}
+\end{figure}
 
 
-\subsection{KKT for AP - GP Method with Rate Constraint}
+\begin{figure}
+	\centering
+	\begin{subfigure}[b]{0.75\textwidth}
+		\centering
+		\includegraphics[width=0.75\textwidth]{kktrc8142}
+		\caption{Convergence of sum rate with $N_\mathrm{T} = 8, B = 2, K = 4$, Mobile users}
+		\label{fig_1}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.75\textwidth}
+		\centering
+		\includegraphics[width=0.75\textwidth]{kkte0rc8182}
+		\caption{Convergence of sum rate with $N_\mathrm{T} = 8, B = 2, K = 8$, Mobile users}
+		\label{fig-2}
+	\end{subfigure}
+	\caption{Sum rate convergence for mobile users}
+	\label{figII}
+\end{figure}
 
-In this section we discuss a way to decentralize the precoder design across the corresponding \ac{BS} in \me{\mathcal{B}} based on AP-GP method with rate constraint. In this method also the problem is solved using the \ac{KKT} conditions. The weighted sum rate maximization problem with \ac{QoS} constraints subject to convex transmit power constraint \me{\mathcal{P}} is considered. Let us consider the same convex optimization problem as in (4.8) the objective function (4.8a) and the constraint equation set from (4.9ba) and (4.8c) to (4.8d) remains the same. In addition we add a rate constraint to the equations, making a total of four constraints to the objective function.
+\begin{figure}
+	\centering
+	\begin{subfigure}[b]{0.75\textwidth}
+		\centering
+		\includegraphics[width=0.75\textwidth]{kktmserc8142}
+		\caption{Convergence of sum rate with $N_\mathrm{T} = 8, B = 2, K = 4$, Mobile users}
+		\label{fig_1}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.75\textwidth}
+		\centering
+		\includegraphics[width=0.75\textwidth]{kktmserc8182}
+		\caption{Convergence of sum rate with $N_\mathrm{T} = 8, B = 2, K = $, Mobile users}
+		\label{fig-2}
+	\end{subfigure}
+	\caption{Sum rate convergence for mobile users}
+	\label{figIII}
+\end{figure}
 
-\begin{subeqnarray}
-	\underset{w_k, \gamma_k, \beta_k}{\text{maximize}} \quad && \sum_{k} \log_2 e \, \log (1+ \gamma_k) \\
-	\text{subject to} \quad && \eqref{APGP1_eqn} \quad and \quad \eqref{APGPb_eqn} - \eqref{APGPc_eqn} \nonumber \\
-	&& d_k: \log_2 e \, \log_e (1 + \gamma_k) \geq R_0 \slabel{apgprc2_eqn}
-	\label{apgprc_eqn}
-\end{subeqnarray}
+%\begin{figure}
+%\centering
+%\begin{subfigure}[b]{0.75\textwidth}
+%\centering
+%\includegraphics[width=0.75\textwidth]{2_6_8_1}
+%\caption{Convergence of sum rate with $N_\mathrm{T} = 8, B = 2, K = 6$, Mobile users}
+%\label{fig_1}
+%\end{subfigure}
+%\begin{subfigure}[b]{0.75\textwidth}
+%\centering
+%\includegraphics[width=0.75\textwidth]{3_9_12_1}
+%\caption{Convergence of sum rate with $N_\mathrm{T} = 12, B = 3, K = 9$, Mobile users}
+%\label{fig-2}
+%\end{subfigure}
+%\caption{Sum rate convergence for mobile users}
+%\label{figIV}
+%\end{figure}
 
-The variable \me{a_k, b_k, c_k, d_k} are dual variables corresponding to equations in \eqref{apgprc_eqn}. The optimization variables is the transmit precoder vector \me{\mathbf{w}_k \in \mathbb{C}^{N_T} \forall k}, where k= 1,2,\me{\dotsc},K. 
-
-The Lagrangian function for the problem can be written as,
-\begin{eqnarray}
-L(\gamma_k, \beta_k, \mathbf{w}_k) = -\log_2 e \log_e (1 + \gamma_k)  + a_k \left(\dfrac{ 1 }{2  \phi_k}  \gamma_k + \dfrac {\phi_k}{2} \beta_k - \mathbf{h}_{{b_k},k} \mathbf{w}_k \right)  \nonumber \\
-+ b_k \left({\sigma^{2}+\sum_{\substack{i = 1, \\ i \neq k}}^{K} \|\mathbf{h}_{{b_i},k}\mathbf{w}_i\|^{2}} -\beta_k  \right) + c_k \left( \sum_{k \in \mathcal{U}_b} \|\mathbf{w}_k \|_2^2 - P_b  \right) + d_k \left( R_0 - \log_2 e \log_e(1 + \gamma_k) \right)
-\label{apgprcl_eqn}
-\end{eqnarray}
-
-By evaluating the Lagrangian function in \eqref{apgprcl_eqn} with respect to the primal and dual variables we obtain an iterative solution as 
-\begin{program}[h]
-	\begin{equation}
-	\arraycolsep=4pt\def\arraystretch{3}
-	\begin{array}{rcl}
-	a_k^{(i)} & \longrightarrow & \dfrac{2 \phi_k^{(i)} (1 + d_k^{(i-1)})}{1 + \gamma_k^{(i-1)}}\\
-	b_k^{(i)} & \longrightarrow & \dfrac{a_k^{(i)} \phi_k^{(i)}}{2} \\
-	\mathbf{w}_k^{(i)} & \longrightarrow & \dfrac{a_k^{(i)}}{2} \left (\; \displaystyle \sum_{i \neq K} b_i^{(i)} \mathbf{h}_{{b_k},i}^H \mathbf{h}_{{b_k},i}  + c_k \mathbf{I}_{N_T} \; \right )^{-1} \mathbf{h}_{{b_k},k}^H \\
-	\gamma_k^{(i)} & \longrightarrow & 2 \phi_k^{(i)}  \left ( \, \Re\{\mathbf{h}_{{b_k},k} \mathbf{w}_k \} - \dfrac{\phi_k^{(i)} \beta_k}{2} \, \right ) \\
-	d_k^{(i)} & \longrightarrow & d_k^{(i-1)} + \rho \left(  R_0' - \log(1 + \gamma_k^{(i)}) \right)
-	\end{array}
-	\label{apgprckkt_eqn}
-	\end{equation}
-	\caption{Update Procedure}
-\end{program}
-
-Since the dual variable \me{a_k^{(i)}} is dependent on \me{\phi_k^{(i)}}, one has to be optimized first to optimize the other. Here, \me{a_k^{(i+1)}} is fixed to evaluate \me{\phi_k^{(i)}}. In every iteration the dual variables are linearly interpolated between the fixed iterate \me{a_k^{(i)}}. The dual variable \me{d_k^{(i + 1)}} is iterated with a fixed \me{d_k^{(i)}} using a step size \me{\rho}. Similar to \me{\rho} depends upon the system model and its behaviour. The stepsize \me{\rho} must be small or diminishing such that the convergence is gauranteed.
-
-The \ac{KKT} expression in \eqref{apgprckkt_eqn} is solved in an iterative manner by initializing the dual variable \me{a_k} with ones to have equal priorities among the user set in the system. The transmit precoder \me{\mathbf{w}_k} in equation \eqref{apgprckkt_eqn} depends on the \ac{BS} specific dual variable \me{c_k}, which is found by the bisection search satisfying the total power constraint in \eqref{APGPc_eqn}. It can be noted that the fixed \ac{SCA} operating point is given by \me{d_k^{(i)}} which is also considered in the expression in \eqref{apgprckkt_eqn}.
-
-Inorder to obtain a possible practical decentralized precoder design, we consider that the \ac{BS} \me{b} knows the initial channel \me{\mathbf{h}_{b_k,k} \forall k}. Once, after receiving the updated transmit precodersfrom all \ac{BS}s in \me{\mathcal{B}}, each user evaluates its corresponding precoder vector and is notify that to the \ac{BS} via \ac{UL} precoded pilots. On obtaining the pilots the \ac{BS} updates all the values. Using the current updated values the \me{a_k^{(i)}, b_k^{(i)}, \mathbf{w}_k^{(i)}, \gamma_k^{(i)}} are valuates using \eqref{apgprckkt_eqn} and the updated dual variables are exchanged between the \ac{BS} to evaluate the transmit precoders for the next iteration. The \ac{SCA} operating point is also updated using the current rate \me{\gamma_k}. 
-
-The users belonging to a particular \ac{BS}s perform all the processing that is required and will update the precoders based on the feedback information from the user, inorder to avoid back haul exchanges within the \ac{BS}. Once the transmit precoders are obtained from the \ac{BS}, every user update their dual variables \me{a_k^{(i)}}, \me{b_K^{(i)}} and \me{d_k^{(i)}} and the transmit precoder \me{\mathbf{w}_k} and rate \me{\gamma_k} is updated. After recieving the updates the \ac{BS} use the effective channel to update the transmit precoders. Algorithm 2 gives a practical way for updating the transmit precoders for the \ac{KKT} based AP-GP with rate constraint reformulated \ac{WSRM} problem. In the algorithm it can be observed that we have an inner loop if there is a rate constraint and if there is no rate constraint. According to our problem we can switch between the algorithms. The convergence analysis for the algorithm is discussed in the Appendix.
-
-
-\subsection{KKT for MSE without Rate Constraint}
-
-In this section we discuss a way to decentralize the precoder design across the corresponding \ac{BS} in \me{\mathcal{B}} based on MSE Reformulation without rate constraint. In this method also the problem is solved using the \ac{KKT} conditions. The weighted sum rate maximization problem with \ac{QoS} constraints subject to convex transmit power constraint \me{\mathcal{P}} is solved by exploiting the relationship between the \ac{MSE} and the achievable \ac{SINR} when the \ac{MMSE} receivers are used at the terminals reference ganesh 4 and 5. The \ac{MSE} \me{\epsilon_k} for a data symbol \me{d_k} is given as
-
-\begin{equation}
-\epsilon_k = \mathbb{E} \left[ (d_k' - d_k)^2\right] = |1 - u_k^H \mathbf{h}_{{b_k},k} \mathbf{w}_k|^2 + \sum_{i \in \bar{\mathcal{U}_b}} \|u_i^H \mathbf{h}_{{b_k},i} \mathbf{w}_i\|^2 + \bar{N_0}
-\label{kktmse_eqn}
-\end{equation}
-where \me{d_k'} is the estimated data symbol or the esitmate of transmit symbol. It must be noted that for fixed recievers, equation \eqref{kktmse_eqn} is a convex function in terms of transmit beamformer \me{w_k \forall k}. The receive beamformers \me{u_k \forall k} can be solved directly by evaluating the roots of the gradients of the Lagrangian of our main problem in equation 1. The optimal receive beamformers turn out to be equal to the well known \ac{MMSE} recievers. The optimal reciever is in fact a scaled version of \ac{MMSE} reciever for k users given as
-
-\begin{eqnarray}
-R_k = \sum_{i=1}^K \mathbf{h}_{{b_k},k} \mathbf{w}_k \mathbf{w}_k^H \mathbf{h}_{{b_k},k}^H + N_0 I_{N_R}  \nonumber \\
-u_k = R_k^{-1} \mathbf{h}_{{b_k},k} \mathbf{w}_k 
-\label{kktmserx_eqn}
-\end{eqnarray}
-The \ac{MMSE} receiver in \eqref{kktmserx_eqn} can also be used without compromising the performance. Using the \eqref{kktmserx_eqn} in the \ac{MSE} expression in \eqref{kktmse_eqn} and when \ac{MMSE} receive beamformers are applied for each spatial data stream, the corresponding \ac{SINR} is inversely related to the \ac{MSE} as,
-\begin{equation}
-\epsilon_k = \left(1 + \gamma_k\right)^{-1}.
-\end{equation}
-
-We apply the above equations and reformulate our \ac{WSRM} problem. Also, we note that in the problem formulation above, the receive beamformers is no longer considered as optimization variable. 
-
-Let us consider the objective function that can be written as \me{{\text{maximize}} \sum_{i=1}^{K} \log{(1 + \gamma_k)} \rightleftarrows \text{minimize} \sum_{i=1}^{K} \log{\epsilon_k}}. The alternative formulation is non convex so we can take the \ac{SCA} approach (reference) by relaxing the constraint by a sequence of convex subsets by a sequence of convex subsets using first order taylors series expansion around the fixed \ac{MSE} point \me{\bar{\epsilon}_k} as, \me{\text{minimize} \sum_{i=1}^{K} \lbrace{\log \bar{\epsilon}_k + \dfrac{\epsilon - \bar{\epsilon}_k}{\log_2 \bar{\epsilon}_k}\rbrace}}. Where, \me{\log_2 \bar{\epsilon}_k} is a constant and \me{\frac{\epsilon_k}{\log_2 \bar{\epsilon}_k}} is a variable. So with all this results, the equivalent optimization problem can be formulated with the objective function as, \me{\text{minimize} -\sum_{i=1}^{K} \log {\epsilon}_k}. Using these approximations for the rate constraint, the problem is solved for optimal transmit precoders \me{\mathbf{w}_k}, \ac{MSE}s \me{\epsilon_k} and the user rates over each sub channel for a fixed revceive beamformer. The optmization sub problem to find the transmit precoders for a fixed recieve beamformer \me{\mathbf{u}_k} is  
-\begin{subeqnarray}
-	\underset{w_k, \epsilon_k, t_k}{\text{maximize}} \quad && \sum_{i = 1}^{K} \frac{\epsilon_k}{\bar{\epsilon_k}}  \\
-	\text{subject to} && a_k: \epsilon_k \geq  |1 - u_k^H \mathbf{h}_{{b_k},k} \mathbf{w}_k|^2 + \sum_{i \in \bar{\mathcal{U}_b}} \|u_i^H \mathbf{h}_{{b_k},i} \mathbf{w}_i\|^2 + N_0 \slabel{kktmse2a_eqn}\\
-	&& b_k: \sum_{k \in \mathcal{U}_b} \|\mathbf{w}_k \|_2^2 \leq {P_b}, \forall {b \in \mathcal{B}} \slabel{kktmse2b_eqn}
-	\label{kktmse2_eqn}
-\end{subeqnarray}
-where, \me{a_k,b_k} are the dual variables corresponding to the constraints in the equation \eqref{kktmse2a_eqn} and \eqref{kktmse2b_eqn}. 
-
-The Lagrangian for the above problem in \eqref{kktmse2_eqn} is
-\begin{equation}
-L(\epsilon_k, \mathbf{w}_k) = \sum_{i = 1}^{K} \frac{\epsilon_k}{\bar{\epsilon_k}}+ a_k \left[|1 - \mathbf{u}_k^H \mathbf{h}_{{b_k},k} \mathbf{w}_k|^2 + \sum_{i \in \bar{\mathcal{U}_b}} \|\mathbf{u}_i^H \mathbf{h}_{{b_k},i} \mathbf{w}_i\|^2 + N_0 - \epsilon_k\right] + b_k \left[ \sum_{k \in \mathcal{U}_b} \|\mathbf{w}_k \|_2^2 - P_b  \right].
-\label{kktmse3_eqn}
-\end{equation}
-
-By evaluating the Lagrangian function in \eqref{kktmse3_eqn} with respect to the primal and dual variables we obtain an iterative solution as 
-\begin{program}[h]
-	\begin{equation}
-	\arraycolsep=4pt\def\arraystretch{3}
-	\begin{array}{rcl}
-	a_k^{(i)} & \longrightarrow & \dfrac{1}{\bar{\epsilon_k}^{(i-1)}}\\
-	\mathbf{w_k}^{(i)} & \longrightarrow & a_k \left( \, a_k \sum_{i=1}^K \mathbf{h}_{{b_i},k}^H \mathbf{u}_i \mathbf{u}_i^H \mathbf{h}_{{b_k},k} + b_k I \, \right)^{-1} \mathbf{u}_k^H \mathbf{h}_{{b_k},k}\\
-	\epsilon_k^{(i)} & \longrightarrow &  |1 - u_k^{H(i)} \mathbf{h}_{{b_k},k} \mathbf{w}_k^{(i)}|^2 + \sum_{i \in \bar{\mathcal{U}_b}} \|u_i^{H(i)} \mathbf{h}_{{b_k},i} \mathbf{w}_i^{(i)}\|^2 + N_0 
-	\end{array}
-	\label{kktmse4_eqn}
-	\end{equation}
-	\caption{Update Procedure}
-\end{program}
-
-The \ac{KKT} expression is solved in an iterative way by initializing the transmit beamformer \me{w_k} with single user beamforming and the \ac{MMSE} vector. The dual variables \me{a_k} is initialized with ones to have equal priorities for all the users in system. Then the transmit precoder is evaluated by making use of the equation in \eqref{kktmse4_eqn}. The transmit precoder depends upon the \ac{BS} specific dual variable \me{b_k} which can be found by the bisection search by satisfying the total power constraint. The fixed \ac{SCA} operating point is given by \me{\bar{\epsilon}_k^{(i + 1)} = \epsilon_k^{(i)}}.
-
-Inorder to obtain a distributed precoder design, an assumption is made that each \ac{BS} \me{b} knows the corresponding equivalent channel \me{\mathbf{u}_k^H \mathbf{h}_{{b_k},k} \forall k \in \mathcal{U}}, which includes the receivers, \me{\mathbf{u}_k} through precoded uplink pilot signaling. Once the updated transmitted precoder is received from all \ac{BS}s in \me{\mathcal{B}}, each user evaluates the \ac{MMSE} receiver in equation (4.20) and is updated to the \ac{BS}s via the uplink precoded pilots. Upon recieving the pilot symbol the \ac{BS} update the \ac{MSE} as,
-\begin{equation}
-\epsilon_k^{(i)} = 1 - \mathbf{u}_k^{(i)} \mathbf{h}_{{b_k},k} \mathbf{w}_k^{(i)}
-\end{equation}
-
-Using the current \ac{MSE} value \me{a-k^{(i)}} is evaluated using \eqref{kktmse4_eqn} and the updated dual variables are exchanged between the \ac{BS} to evaluate the transmit precoders \me{\mathbf{w}_k^{(i + 1)}} for the next iteration. The \ac{SCA} operating point is also updated with the current \ac{MSE} value.
-
-The users belonging to a particular \ac{BS}s perform all the processing that is required and will update the precoders based on the feedback information from the user, inorder to avoid back haul exchanges within the \ac{BS}. Once the transmit precoders are obtained from the \ac{BS}, every user update their dual variables \me{a_k^{(i)}} and the transmit precoder \me{\mathbf{w}_k} and rate \me{\epsilon_k} is updated. After recieving the updates the \ac{BS} use the effective channel to update the transmit precoders. Algorithm 3 gives a practical way for updating the transmit precoders for the \ac{KKT} based MSE without rate constraint for reformulated \ac{WSRM} problem. The convergence analysis for the algorithm is discussed in the Appendix.
-
-\begin{algorithm}[h]
-	\caption[Distributed Precoder Design]{KKT for MSE with and without Rate Constraint}
-	\label{algo-2}
-	\begin{algorithmic}
-		\label{algo--2}
-		\STATE \textbf{Input:} \me{\alpha_k, \mathbf{h}_{b_k,k}, \forall b \in \mathcal{B}, \forall k \in \mathcal{U}_b}.
-		\STATE \textbf{Output:} \me{\mathbf{w}_k, \forall k \in \lbrace{1,2,\dotsc,K \rbrace}}
-		\STATE \textbf{Initialization:} \me{i = 1} , dual variables	\me{{a_k}^{(0)} = 1}, and \me{I_{max}} for certain value
-		\REPEAT
-		\STATE \textbf{for each} \ac{BS} \me{b \in \mathcal{B}} perform the following procedure
-		\STATE update \me{\mathbf{w}_k^{(i)}} using (5.33) and perform the downlink pilot transmission
-		\STATE evaluate \me{\epsilon_k^{(i)}, a_k^{(i)}} using the equations (5.41) and (5.42) 
-		\IF {Rate constraint exists}
-		\STATE evaluate \me{c_k^{(i)}} using equation (5.43)
-		\STATE update dual variable \me{a_k^{(i)}} using the equation (5.42)
-		\ENDIF
-		\STATE using the precoded uplink pilots \me{\mathbf{w}_k^{(i)}} and \me{a_k^{(i)}} are notified to all \ac{BS} in \me{\mathcal{B}}
-		\UNTIL {convergence or \me{i \geq I_{max}}}\\
-	\end{algorithmic} 
-\end{algorithm}
-
-\subsection{KKT for MSE with Rate Constraint}
-
-In this section we discuss a way to decentralize the precoder design across the corresponding \ac{BS} in \me{\mathcal{B}} based on MSE Reformulation with rate constraint. The problem is solved using the \ac{KKT} conditions. The weighted sum rate maximization problem with \ac{QoS} constraints subject to convex transmit power constraint \me{\mathcal{P}} is solved by exploiting the relationship between the \ac{MSE} and the achievable \ac{SINR} when the \ac{MMSE} receivers are used at the terminals reference ganesh 4 and 5. The problem \ac{KKT} for \ac{MSE} with rate constraint can be seen similar to \ac{KKT} for \ac{MSE} without rate constraint. We add a rate constraint to the existing \ac{KKT} for \ac{MSE} adding a total of three constraints to the problem in (4.18). Rest every assumptions remains the same in this formulation,
-\begin{subeqnarray}
-	\underset{w_k, \epsilon_k, t_k}{\text{maximize}} \quad && \sum_{i = 1}^{K} \frac{\epsilon_k}{\bar{\epsilon_k}}  \\
-	\text{subject to} && \eqref{kktmse2a_eqn} - \eqref{kktmse2b_eqn} \nonumber \\
-	&& c_k: - \log {\epsilon_k} \geq R_0. \slabel{kktmserc1a_eqn}
-	\label{kktmserc1_eqn}
-\end{subeqnarray}
-where, \me{a_k, b_k, c_k} are the dual variables corresponding to the constraints in the equation \eqref{kktmserc1_eqn}. We can observe that the the constraint in \eqref{kktmserc1a_eqn} is non convex, so upon taking the first order taylors series approximation we obtain  
-\begin{equation}
-c_k: -\log \bar{\epsilon}_k + \frac{\epsilon_k - \bar{\epsilon}_k}{\log \bar{\epsilon}_k} \geq R_0'
-\label{kktmserc2_eqn}
-\end{equation}
-so that we can replace the constraint in  \eqref{kktmserc1a_eqn} with \eqref{kktmserc2_eqn}.
-
-The Lagrangian for the above problem in \eqref{kktmserc1_eqn} is given as 
-\begin{eqnarray}
-L(\epsilon_k, \mathbf{w}_k) = \sum_{i = 1}^{K} \frac{\epsilon_k}{\bar{\epsilon_k}}+ a_k \left[|1 - \mathbf{u}_k^H \mathbf{h}_{{b_k},k} \mathbf{w}_k|^2 + \sum_{i \in \bar{\mathcal{U}_b}} \|\mathbf{u}_i^H \mathbf{h}_{{b_k},i} \mathbf{w}_i\|^2 + N_0 - \epsilon_k\right] \nonumber \\
-+ b_k \left[ \sum_{k \in \mathcal{U}_b} \|\mathbf{w}_k \|_2^2 - P_b  \right] + c_k \left[ R_0' + \log \epsilon_k - \dfrac{\epsilon_k - \bar{\epsilon}_k}{\log \bar{\epsilon}_k} \right].
-\label{kktmserc3_eqn}
-\end{eqnarray}
-\par
-By evaluating the Lagrangian function in \eqref{kktmserc3_eqn} with respect to the primal and dual variables we obtain an iterative solution as 
-\begin{program}[h]
-	\begin{equation}
-	\arraycolsep=4pt\def\arraystretch{3}
-	\begin{array}{rcl}
-	a_k^{(i)} & \longrightarrow & - \dfrac{c_k^{(i)}}{\log \bar{\epsilon_k}} + \dfrac{1}{\bar {\epsilon_k}} \\
-	\mathbf{w_k}^{(i)} & \longrightarrow & a_k \left( \, a_k \sum_{i=1}^K \mathbf{h}_{{b_i},k}^H \mathbf{u}_i \mathbf{u}_i^H \mathbf{h}_{{b_k},k} + b_k I \, \right)^{-1} \mathbf{u}_k^H \mathbf{h}_{{b_k},k}\\
-	\epsilon_k^{(i)} & \longrightarrow &  |1 - u_k^{H(i)} \mathbf{h}_{{b_k},k} \mathbf{w}_k^{(i)}|^2 + \sum_{i \in \bar{\mathcal{U}_b}} \|u_i^{H(i)} \mathbf{h}_{{b_k},i} \mathbf{w}_i^{(i)}\|^2 + N_0 \\
-	c_k^{(i+)} & \longrightarrow & c_k^{(i)} + \alpha \left( R_0' + \log \bar{\epsilon}_k - \dfrac{\epsilon_k - \bar{\epsilon}_k}{\log \epsilon_k} \right)	
-	\end{array}
-	\label{kktmserckkt_eqn}
-	\end{equation}
-	\caption{Update Procedure}
-\end{program}
-
-\par
-The \ac{KKT} expression is solved in an iterative way by initializing the transmit beamformer \me{w_k} with single user beamforming and the \ac{MMSE} vector. The dual variables \me{a_k} is initialized with ones to have equal priorities for all the users in system. Then the transmit precoder is evaluated by making use of the equation in \eqref{kktmserckkt_eqn}. The transmit precoder depends upon the \ac{BS} specific dual variable \me{b_k} which can be found by the bisection search by satisfying the total power constraint. The dual variable \me{c_k} is updated by \ac{SCA} approximation. The fixed \ac{SCA} operating point is given by \me{\bar{\epsilon}_k^{(i + 1)} = \epsilon_k^{(i)}}.
-
-Inorder to obtain a distributed precoder design, an assumption is made that each \ac{BS} \me{b} knows the corresponding equivalent channel \me{\mathbf{u}_k^H \mathbf{h}_{{b_k},k} \forall k \in \mathcal{U}}, which includes the receivers, \me{\mathbf{u}_k} through precoded uplink pilot signaling. Once the updated transmitted precoder is received from all \ac{BS}s in \me{\mathcal{B}}, each user evaluates the \ac{MMSE} receiver in equation \eqref{kktmserckkt_eqn} and is updated to the \ac{BS}s via the uplink precoded pilots. Upon recieving the pilot symbol the \ac{BS} update the \ac{MSE} as,
-\begin{equation}
-\epsilon_k^{(i)} = 1 - \mathbf{u}_k^{(i)} \mathbf{h}_{{b_k},k} \mathbf{w}_k^{(i)}
-\label{kktmserc5_eqn}
-\end{equation}
-
-Using the current \ac{MSE} value \me{a_k^{(i)}} is evaluated using \eqref{kktmserckkt_eqn} and the updated dual variables are exchanged between the \ac{BS} to evaluate the transmit precoders \me{\mathbf{w}_k^{(i + 1)}} for the next iteration. The \ac{SCA} operating point is also updated with the current \ac{MSE} value.
-
-The users belonging to a particular \ac{BS}s perform all the processing that is required and will update the precoders based on the feedback information from the user, inorder to avoid back haul exchanges within the \ac{BS}. Once the transmit precoders are obtained from the \ac{BS}, every user update their dual variables \me{a_k^{(i)}} and the transmit precoder \me{\mathbf{w}_k} and rate \me{\epsilon_k} is updated. After updating the precoders and rate the \ac{SCA} update is made for the dual variable \me{c_k} and is updated. After receiving the updates the \ac{BS} use the effective channel to update the transmit precoders. Algorithm 3 gives a practical way for updating the transmit precoders for the \ac{KKT} based MSE with rate constraint for reformulated \ac{WSRM} problem. In the algorithm there is an inner loop to find if there is a rate constraint and if the answer is yes, then the \ac{SCA} update is made for the rate constraint with the dual variable \me{c_k}. The convergence analysis for the algorithm is discussed in the Appendix.
-
-In general, all the above algorithms will converge to a feasible solution if the QoS constraints are feasible. For each non-feasible rate constraint, the sum rate variable \me{\gamma_k \forall k = 1,2,\dotsc,K} will increase until the rate constraints are satisfied. When the problem is non feasible from the start, then the algorithm oscillates among a group of non-feasible rate constraints. The behavior of these algorithms can be seen in the next section Numerical Results, where each scenario is given as example. The convergence analysis of the distributed algorithm is discussed in Appendix 
-
-\newpage
-\begin{theorem}
-	Every limit point of the sequence generated by above algorithms is a stationary point.
-\end{theorem}
-\begin{proof}
-	See Appendix.
-\end{proof}	
